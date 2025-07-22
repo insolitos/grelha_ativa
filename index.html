@@ -570,13 +570,30 @@
 
             const loadState = () => {
                 try {
-                    const savedState = localStorage.getItem(APP_STATE_KEY);
-                    if (savedState) {
-                        appState = JSON.parse(savedState);
+                    const savedStateJSON = localStorage.getItem(APP_STATE_KEY);
+                    if (savedStateJSON) {
+                        const savedState = JSON.parse(savedStateJSON);
+                        
+                        // Garante que as propriedades de nível superior existem
+                        appState.nextClassId = savedState.nextClassId || 1;
+                        appState.activeClassId = savedState.activeClassId || null;
+                        appState.classes = savedState.classes || {};
+
+                        // Valida cada objeto de turma para garantir que tem todas as propriedades necessárias
+                        for (const classId in appState.classes) {
+                            if (Object.prototype.hasOwnProperty.call(appState.classes, classId)) {
+                                // Funde com os padrões. Os dados guardados sobrepõem-se aos padrões.
+                                appState.classes[classId] = {
+                                    ...initialClassState(), // Fornece todas as chaves padrão
+                                    ...appState.classes[classId] // Sobrepõe com os valores guardados
+                                };
+                            }
+                        }
                     }
                 } catch (e) {
-                    console.error("Falha ao carregar o estado do localStorage", e);
-                    appState = { classes: {}, activeClassId: null, nextClassId: 1 }; // Reset state on error
+                    console.error("Falha ao carregar ou validar o estado do localStorage", e);
+                    // Reinicia para um estado seguro conhecido se a análise/validação falhar
+                    appState = { classes: {}, activeClassId: null, nextClassId: 1 };
                 }
             };
 
@@ -725,7 +742,12 @@
 
             const renderStudentsList = () => {
                 const activeClass = getActiveClass();
-                const studentsInGridIds = new Set(Object.values(activeClass.classroomLayout).filter(Boolean).map(s => s.id));
+                if (!activeClass) {
+                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhuma turma selecionada.</p></div>`;
+                    return;
+                }
+                // CORREÇÃO: Adicionado `|| {}` para evitar erro se classroomLayout não existir.
+                const studentsInGridIds = new Set(Object.values(activeClass.classroomLayout || {}).filter(Boolean).map(s => s.id));
                 const availableStudents = activeClass.students.filter(student => !studentsInGridIds.has(student.id));
 
                 if (activeClass.students.length === 0) {
@@ -750,6 +772,7 @@
 
             const renderClassroomGrid = () => {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const gridHtml = Array.from({ length: GRID_SIZE }, (_, i) => {
                     const student = activeClass.classroomLayout[i];
                     const interactionCount = student ? Object.values(activeClass.interactions[student.id] || {}).reduce((a, b) => a + b, 0) : 0;
@@ -770,6 +793,7 @@
 
             const updateStatistics = () => {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const totalInteractions = Object.values(activeClass.interactions)
                     .flatMap(Object.values)
                     .reduce((sum, count) => sum + count, 0);
@@ -784,6 +808,7 @@
 
             const updateClassStatusUI = () => {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const isActive = activeClass.isClassActive;
 
                 DOMElements.toggleClassBtn.textContent = isActive ? 'Terminar Aula' : 'Iniciar Aula';
@@ -844,6 +869,7 @@
                 
                 const studentId = parseInt(button.dataset.studentId);
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const student = activeClass.students.find(s => s.id === studentId);
 
                 if (button.classList.contains('remove')) {
@@ -894,7 +920,7 @@
             function handleDrop(e) {
                 e.preventDefault();
                 const activeClass = getActiveClass();
-                if (activeClass.isClassActive) return;
+                if (!activeClass || activeClass.isClassActive) return;
                 e.currentTarget.classList.remove('drag-over');
 
                 const studentId = parseInt(e.dataTransfer.getData('text/plain'));
@@ -923,7 +949,7 @@
                 if (!cell) return;
 
                 const activeClass = getActiveClass();
-                if (!activeClass.isClassActive) return;
+                if (!activeClass || !activeClass.isClassActive) return;
                 
                 const studentId = parseInt(cell.dataset.studentId);
                 const student = activeClass.students.find(s => s.id === studentId);
@@ -935,7 +961,7 @@
                 if (!cell) return;
 
                 const activeClass = getActiveClass();
-                if (activeClass.isClassActive) return;
+                if (!activeClass || activeClass.isClassActive) return;
 
                 const cellIndex = parseInt(cell.dataset.cellIndex);
                 const student = activeClass.classroomLayout[cellIndex];
@@ -1026,7 +1052,8 @@
             }
 
             function setupDragAndDrop() {
-                const isClassActive = getActiveClass()?.isClassActive;
+                const activeClass = getActiveClass();
+                const isClassActive = activeClass?.isClassActive;
 
                 document.querySelectorAll('.student-item').forEach(item => {
                     item.setAttribute('draggable', 'true');
@@ -1063,6 +1090,7 @@
             
             function toggleClass() {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 activeClass.isClassActive = !activeClass.isClassActive;
                 if (activeClass.isClassActive) {
                     showToast('Aula iniciada! Clique nos alunos para registar interações.', 'success');
@@ -1076,6 +1104,7 @@
 
             function clearClassData() {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 activeClass.interactions = {};
                 if (activeClass.isClassActive) {
                     toggleClass(); // Termina a aula e re-renderiza
@@ -1091,6 +1120,7 @@
                 if (!button) return;
 
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const interactionType = button.dataset.type;
                 const studentId = parseInt(DOMElements.interactionMenu.dataset.studentId);
                 
@@ -1108,7 +1138,7 @@
 
             function handleRandomStudentSelection() {
                 const activeClass = getActiveClass();
-                if (!activeClass.isClassActive) {
+                if (!activeClass || !activeClass.isClassActive) {
                     showToast("Inicie a aula para selecionar um aluno.", "info");
                     return;
                 }
@@ -1163,6 +1193,7 @@
 
             function generateReport() {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const studentsInGrid = Object.values(activeClass.classroomLayout).filter(Boolean);
                 const lowParticipationStudents = studentsInGrid.filter(student => {
                     const studentInteractions = activeClass.interactions[student.id];
@@ -1220,6 +1251,7 @@
 
             function exportReportToCSV() {
                 const activeClass = getActiveClass();
+                if (!activeClass) return;
                 let csvContent = "data:text/csv;charset=utf-8,";
                 
                 csvContent += `Relatorio da Turma;${activeClass.name}\r\n`;
@@ -1275,6 +1307,8 @@
             }
             
             function populateClassManagementModal() {
+                const activeClass = getActiveClass();
+                if (!activeClass) return;
                 DOMElements.classSelectDropdown.innerHTML = Object.values(appState.classes)
                     .map(c => `<option value="${c.id}" ${c.id === appState.activeClassId ? 'selected' : ''}>${c.name}</option>`)
                     .join('');
@@ -1300,10 +1334,12 @@
 
             function handleRenameClass(e) {
                 e.preventDefault();
+                const activeClass = getActiveClass();
+                if (!activeClass) return;
                 const input = document.getElementById('rename-class-name');
                 const newName = input.value.trim();
                 if (newName) {
-                    getActiveClass().name = newName;
+                    activeClass.name = newName;
                     input.value = '';
                     saveState();
                     populateClassManagementModal();
@@ -1317,7 +1353,9 @@
                     showToast("Não pode apagar a única turma existente.", "error");
                     return;
                 }
-                const className = getActiveClass().name;
+                const activeClass = getActiveClass();
+                if (!activeClass) return;
+                const className = activeClass.name;
                 showConfirmation(`Tem a certeza que deseja apagar a turma "${className}"?`, () => {
                     delete appState.classes[appState.activeClassId];
                     appState.activeClassId = Object.keys(appState.classes)[0];
@@ -1331,3 +1369,15 @@
     </script>
 </body>
 </html>
+```
+
+### O que fazer agora:
+
+1.  **Atualize o código** no seu repositório do GitHub com esta nova versão.
+2.  **Aguarde um minuto** para que o GitHub Pages atualize o seu site.
+3.  **Limpe a cache do seu navegador** para garantir que está a carregar a versão mais recente do ficheiro. Uma forma fácil de fazer isto é fazer um "hard refresh" (normalmente `Ctrl+Shift+R` no Windows/Linux ou `Cmd+Shift+R` no Mac).
+4.  Visite a sua página novamente.
+
+Se o problema persistir (o que é improvável), o passo final seria limpar manualmente os dados do site nas ferramentas de programador: vá ao separador **"Aplicação"** (ou "Application"), depois **"Armazenamento Local"** (ou "Local Storage"), encontre o seu site na lista, clique com o botão direito e selecione **"Limpar"** ("Clear"). Isto irá forçar a aplicação a começar completamente do zero com a nova estrutura de dados.
+
+Estas alterações deverão resolver o problema de forma definiti

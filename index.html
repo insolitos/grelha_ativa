@@ -196,7 +196,6 @@
         .header .container { display: flex; align-items: center; justify-content: space-between; }
         .header__title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin: 0; }
         
-        /* NEW: Class selector styles */
         .class-selector {
             font-size: var(--font-size-lg);
             font-weight: var(--font-weight-medium);
@@ -220,7 +219,7 @@
         .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-card-border-inner); }
         .panel-header h3 { margin: 0; }
         .students-list { min-height: 200px; margin-bottom: var(--space-16); overflow-y: auto; }
-        .panel-actions { margin-top: auto; }
+        .panel-actions { margin-top: auto; display: flex; gap: var(--space-8); }
 
         .student-item { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12); margin-bottom: var(--space-8); background-color: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); cursor: grab; user-select: none; }
         .student-item:hover { background-color: var(--color-secondary); }
@@ -242,6 +241,25 @@
         .cell-student-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); text-align: center; }
         .cell-student-number { font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: var(--space-2); }
         .interaction-count { position: absolute; top: var(--space-4); right: var(--space-4); background-color: var(--color-primary); color: var(--color-btn-primary-text); border-radius: var(--radius-full); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); }
+
+        /* NEW: Highlight animation for random selection */
+        .grid-cell.highlight {
+            animation: highlight-animation 3s ease-out;
+        }
+        @keyframes highlight-animation {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0.7);
+            }
+            40% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(var(--color-teal-500-rgb), 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0);
+            }
+        }
 
         /* Control Panel */
         .control-actions { display: flex; flex-direction: column; gap: var(--space-12); margin-bottom: var(--space-24); }
@@ -341,7 +359,6 @@
         <header class="header">
             <div class="container">
                 <h1 class="header__title">Grelha Ativa</h1>
-                <!-- NEW: Class selector in the header -->
                 <div id="class-selector-container">
                     <span id="active-class-name" class="class-selector"></span>
                 </div>
@@ -356,7 +373,10 @@
                     <aside class="students-panel card">
                         <div class="panel-header">
                             <h3>Lista de Alunos</h3>
-                            <button class="btn btn--primary btn--sm" id="add-student-btn">Adicionar</button>
+                            <div class="panel-header-actions" style="display: flex; gap: 8px;">
+                                <button class="btn btn--secondary btn--sm" id="import-csv-btn">Importar CSV</button>
+                                <button class="btn btn--primary btn--sm" id="add-student-btn">Adicionar</button>
+                            </div>
                         </div>
                         <div class="students-list" id="students-list">
                             <!-- Students will be dynamically added here -->
@@ -386,6 +406,8 @@
                         </div>
                         <div class="control-actions">
                             <button class="btn btn--primary btn--full-width" id="toggle-class-btn">Iniciar Aula</button>
+                            <!-- NEW: Random student button -->
+                            <button class="btn btn--secondary btn--full-width" id="random-student-btn">Selecionar Aluno Aleatório</button>
                             <button class="btn btn--outline btn--full-width" id="clear-data-btn">Limpar Dados da Aula</button>
                             <button class="btn btn--secondary btn--full-width" id="show-report-btn" style="display: none;">Ver Relatório</button>
                         </div>
@@ -407,6 +429,9 @@
             </div>
         </main>
     </div>
+    
+    <!-- Hidden file input for CSV import -->
+    <input type="file" id="csv-file-input" style="display: none;" accept=".csv">
 
     <!-- Add Student Modal -->
     <div class="modal" id="add-student-modal">
@@ -506,7 +531,7 @@
         </div>
     </div>
     
-    <!-- NEW: Class Management Modal -->
+    <!-- Class Management Modal -->
     <div class="modal" id="manage-classes-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content">
@@ -586,6 +611,9 @@
                 createClassBtn: document.getElementById('create-class-btn'),
                 renameClassBtn: document.getElementById('rename-class-btn'),
                 deleteClassBtn: document.getElementById('delete-class-btn'),
+                csvFileInput: document.getElementById('csv-file-input'),
+                importCsvBtn: document.getElementById('import-csv-btn'),
+                randomStudentBtn: document.getElementById('random-student-btn'), // NEW
             };
 
             // --- INITIALIZATION ---
@@ -637,8 +665,12 @@
                 
                 document.getElementById('add-student-btn').addEventListener('click', () => showModal('add-student-modal'));
                 DOMElements.addStudentForm.addEventListener('submit', handleAddStudent);
+                
+                DOMElements.importCsvBtn.addEventListener('click', () => DOMElements.csvFileInput.click());
+                DOMElements.csvFileInput.addEventListener('change', handleFileUpload);
 
                 DOMElements.toggleClassBtn.addEventListener('click', toggleClass);
+                DOMElements.randomStudentBtn.addEventListener('click', handleRandomStudentSelection); // NEW
                 document.getElementById('clear-data-btn').addEventListener('click', () => {
                     showConfirmation('Tem a certeza que deseja limpar os dados de interação desta turma? Esta ação não pode ser desfeita.', clearClassData);
                 });
@@ -670,6 +702,69 @@
                     }
                 });
             }
+            
+             // --- CSV IMPORT ---
+            function handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    processCSV(text);
+                };
+                reader.readAsText(file);
+                
+                event.target.value = '';
+            }
+
+            function processCSV(csvText) {
+                const activeClass = getActiveClass();
+                const lines = csvText.split(/\r\n|\n/);
+                let importedCount = 0;
+                let skippedCount = 0;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line === '') continue;
+
+                    const parts = line.split(/[,;]/);
+                    if (parts.length < 2) {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    const name = parts[0].trim();
+                    const number = parts[1].trim();
+
+                    if (!name || !number) {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    if (activeClass.students.some(s => s.number === number)) {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    const newStudent = { id: activeClass.nextStudentId++, name, number };
+                    activeClass.students.push(newStudent);
+                    importedCount++;
+                }
+
+                if (importedCount > 0) {
+                    saveState();
+                    renderAll();
+                    showToast(`${importedCount} aluno(s) importado(s) com sucesso.`, 'success');
+                }
+                if (skippedCount > 0) {
+                    showToast(`${skippedCount} aluno(s) ignorado(s) (duplicados ou formato inválido).`, 'info');
+                }
+                if (importedCount === 0 && skippedCount === 0) {
+                    showToast('Não foram encontrados alunos para importar no ficheiro.', 'warning');
+                }
+            }
+
 
             // --- CLASS MANAGEMENT ---
             function createNewClass(name, shouldSave = true) {
@@ -677,7 +772,7 @@
                 appState.classes[newClassId] = {
                     id: newClassId,
                     name: name,
-                    ...JSON.parse(JSON.stringify(initialClassState)) // Deep copy
+                    ...JSON.parse(JSON.stringify(initialClassState))
                 };
                 appState.activeClassId = newClassId;
                 if (shouldSave) {
@@ -729,7 +824,7 @@
                 const className = getActiveClass().name;
                 showConfirmation(`Tem a certeza que deseja apagar a turma "${className}"? Todos os seus dados serão perdidos permanentemente.`, () => {
                     delete appState.classes[appState.activeClassId];
-                    appState.activeClassId = Object.keys(appState.classes)[0]; // Switch to the first available class
+                    appState.activeClassId = Object.keys(appState.classes)[0];
                     saveState();
                     populateClassManagementModal();
                     renderAll();
@@ -758,8 +853,10 @@
                 const studentsInGridIds = new Set(Object.values(activeClass.classroomLayout).filter(Boolean).map(s => s.id));
                 const availableStudents = activeClass.students.filter(student => !studentsInGridIds.has(student.id));
 
-                if (availableStudents.length === 0) {
-                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão na grelha ou não existem alunos nesta turma.</p></div>`;
+                if (activeClass.students.length === 0) {
+                     DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhum aluno nesta turma. Adicione alunos manualmente ou importe um ficheiro CSV.</p></div>`;
+                } else if (availableStudents.length === 0) {
+                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão na grelha.</p></div>`;
                 } else {
                     DOMElements.studentsList.innerHTML = availableStudents.map(student => `
                         <div class="student-item" draggable="true" data-student-id="${student.id}">
@@ -1007,6 +1104,50 @@
                 showToast(`${interactionTypes[interactionType].label}: ${student.name}`, 'success');
                 saveState();
                 renderAll();
+            }
+
+            // NEW: Handle random student selection
+            function handleRandomStudentSelection() {
+                const activeClass = getActiveClass();
+                if (!activeClass.isClassActive) {
+                    showToast("Inicie a aula para selecionar um aluno aleatoriamente.", "info");
+                    return;
+                }
+
+                const studentsInGrid = Object.entries(activeClass.classroomLayout)
+                    .filter(([, student]) => student)
+                    .map(([cellIndex, student]) => ({ ...student, cellIndex }));
+
+                if (studentsInGrid.length === 0) {
+                    showToast("Não há alunos na grelha para selecionar.", "warning");
+                    return;
+                }
+
+                // Prioritize students who haven't participated
+                const nonParticipants = studentsInGrid.filter(student => {
+                    const studentInteractions = activeClass.interactions[student.id];
+                    return !studentInteractions || Object.values(studentInteractions).reduce((a, b) => a + b, 0) === 0;
+                });
+
+                let pool = nonParticipants.length > 0 ? nonParticipants : studentsInGrid;
+                
+                const randomIndex = Math.floor(Math.random() * pool.length);
+                const selectedStudent = pool[randomIndex];
+
+                // Highlight the student's cell
+                const cell = DOMElements.classroomGrid.querySelector(`[data-cell-index="${selectedStudent.cellIndex}"]`);
+                if (cell) {
+                    cell.classList.remove('highlight');
+                    setTimeout(() => {
+                        cell.classList.add('highlight');
+                    }, 10);
+                    
+                    setTimeout(() => {
+                         cell.classList.remove('highlight');
+                    }, 3000);
+                }
+
+                showToast(`Aluno selecionado: ${selectedStudent.name}`, 'success');
             }
 
             // --- UI & MODALS ---

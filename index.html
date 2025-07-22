@@ -144,17 +144,21 @@
             transition: all var(--duration-normal) var(--ease-standard);
             border: none;
         }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .btn:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
         .btn--primary { background: var(--color-primary); color: var(--color-btn-primary-text); }
-        .btn--primary:hover { background: var(--color-primary-hover); }
+        .btn--primary:hover:not(:disabled) { background: var(--color-primary-hover); }
         .btn--secondary { background: var(--color-secondary); color: var(--color-text); }
-        .btn--secondary:hover { background: var(--color-secondary-hover); }
+        .btn--secondary:hover:not(:disabled) { background: var(--color-secondary-hover); }
         .btn--outline { background: transparent; border: 1px solid var(--color-border); color: var(--color-text); }
-        .btn--outline:hover { background: var(--color-secondary); }
+        .btn--outline:hover:not(:disabled) { background: var(--color-secondary); }
         .btn--sm { padding: var(--space-4) var(--space-12); font-size: var(--font-size-sm); border-radius: var(--radius-sm); }
         .btn--full-width { width: 100%; }
         .btn--danger { background-color: var(--color-error); color: var(--color-white); }
-        .btn--danger:hover { background-color: rgba(var(--color-red-500-rgb), 0.8); }
+        .btn--danger:hover:not(:disabled) { background-color: rgba(var(--color-red-500-rgb), 0.8); }
 
 
         /* Form elements */
@@ -237,6 +241,8 @@
         /* Classroom Section */
         .classroom-section { display: flex; flex-direction: column; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); }
+        .layout-controls { display: flex; align-items: center; gap: var(--space-8); margin-bottom: var(--space-16); }
+        .layout-controls .form-control { flex: 1; }
         .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); gap: var(--space-8); flex: 1; background-color: var(--color-surface); padding: var(--space-16); border: 1px solid var(--color-card-border); border-radius: var(--radius-lg); }
 
         .grid-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-8); border-radius: var(--radius-base); transition: all var(--duration-normal) var(--ease-standard); position: relative; }
@@ -286,7 +292,7 @@
         .modal__body { padding: var(--space-20); overflow-y: auto; }
         .modal__footer { padding: var(--space-12) var(--space-20); border-top: 1px solid var(--color-card-border-inner); display: flex; justify-content: flex-end; gap: var(--space-12); }
 
-        .confirm-modal__actions { display: flex; justify-content: flex-end; gap: var(--space-12); margin-top: var(--space-24); }
+        .confirm-modal__actions, .prompt-modal__actions { display: flex; justify-content: flex-end; gap: var(--space-12); margin-top: var(--space-24); }
 
         /* Interaction Menu */
         .interaction-menu { position: fixed; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); z-index: 1000; min-width: 250px; display: none; }
@@ -390,9 +396,6 @@
                         <div class="students-list" id="students-list">
                             <!-- Students will be dynamically added here -->
                         </div>
-                        <div class="panel-actions">
-                            <button class="btn btn--secondary btn--sm btn--full-width" id="save-state-btn">Guardar Estado</button>
-                        </div>
                     </aside>
 
                     <!-- Classroom Grid -->
@@ -402,6 +405,11 @@
                             <div class="class-status" id="class-status">
                                 <span class="status status--info">Configuração</span>
                             </div>
+                        </div>
+                        <div class="layout-controls">
+                            <select id="layout-select" class="form-control"></select>
+                            <button id="save-layout-btn" class="btn btn--secondary btn--sm">Guardar Layout...</button>
+                            <button id="manage-layouts-btn" class="btn btn--outline btn--sm">Gerir...</button>
                         </div>
                         <div class="classroom-grid" id="classroom-grid">
                             <!-- Grid cells will be dynamically generated -->
@@ -566,6 +574,29 @@
             </div>
         </div>
     </div>
+
+    <!-- Prompt Modal -->
+    <div class="modal" id="prompt-modal">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="prompt-modal-title">Input Required</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <p id="prompt-modal-text">Please enter a value:</p>
+                <form id="prompt-form">
+                    <div class="form-group">
+                        <input type="text" id="prompt-input" class="form-control" required>
+                    </div>
+                    <div class="prompt-modal__actions">
+                        <button type="button" class="btn btn--outline" id="prompt-cancel-btn">Cancelar</button>
+                        <button type="submit" class="btn btn--primary" id="prompt-ok-btn">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <!-- Class Management Modal -->
     <div class="modal" id="manage-classes-modal">
@@ -600,6 +631,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- Manage Layouts Modal -->
+    <div class="modal" id="manage-layouts-modal">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Gerir Layouts</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body" id="manage-layouts-list">
+                <!-- Layout list will be populated here -->
+            </div>
+        </div>
+    </div>
 
 
     <script>
@@ -607,7 +652,8 @@
             // --- STATE MANAGEMENT ---
             const initialClassState = {
                 students: [],
-                classroomLayout: {}, // { cellIndex: studentObject }
+                layouts: { 'Layout Padrão': {} },
+                activeLayoutName: 'Layout Padrão',
                 interactions: {}, // { studentId: { interactionType: count } }
                 isClassActive: false,
                 nextStudentId: 1
@@ -641,18 +687,33 @@
                 addStudentForm: document.getElementById('add-student-form'),
                 editStudentForm: document.getElementById('edit-student-form'),
                 interactionMenu: document.getElementById('interaction-menu'),
+                // Modals
                 confirmModal: document.getElementById('confirm-modal'),
                 confirmModalText: document.getElementById('confirm-modal-text'),
                 confirmOkBtn: document.getElementById('confirm-ok-btn'),
+                promptModal: document.getElementById('prompt-modal'),
+                promptForm: document.getElementById('prompt-form'),
+                promptInput: document.getElementById('prompt-input'),
+                promptTitle: document.getElementById('prompt-modal-title'),
+                promptText: document.getElementById('prompt-modal-text'),
+                promptOkBtn: document.getElementById('prompt-ok-btn'),
+                promptCancelBtn: document.getElementById('prompt-cancel-btn'),
                 manageClassesModal: document.getElementById('manage-classes-modal'),
+                manageLayoutsModal: document.getElementById('manage-layouts-modal'),
+                // Class Management
                 classSelectDropdown: document.getElementById('class-select-dropdown'),
                 createClassBtn: document.getElementById('create-class-btn'),
                 renameClassBtn: document.getElementById('rename-class-btn'),
                 deleteClassBtn: document.getElementById('delete-class-btn'),
+                // Layout Management
+                layoutSelect: document.getElementById('layout-select'),
+                saveLayoutBtn: document.getElementById('save-layout-btn'),
+                manageLayoutsBtn: document.getElementById('manage-layouts-btn'),
+                manageLayoutsList: document.getElementById('manage-layouts-list'),
+                // Misc
                 csvFileInput: document.getElementById('csv-file-input'),
                 importCsvBtn: document.getElementById('import-csv-btn'),
                 randomStudentBtn: document.getElementById('random-student-btn'),
-                saveStateBtn: document.getElementById('save-state-btn'),
             };
 
             // --- INITIALIZATION ---
@@ -661,11 +722,10 @@
                 if (Object.keys(appState.classes).length === 0) {
                     createNewClass("Minha Primeira Turma", false); // Don't save yet
                 }
-                // Ensure activeClassId is valid
                 if (!appState.activeClassId || !appState.classes[appState.activeClassId]) {
                     appState.activeClassId = Object.keys(appState.classes)[0] || null;
                 }
-                saveState(); // Save initial state if a new class was created
+                saveState();
                 setupEventListeners();
                 renderAll();
             }
@@ -673,10 +733,11 @@
             function renderAll() {
                 if (!appState.activeClassId || !appState.classes[appState.activeClassId]) {
                     console.warn("No active class to render.");
-                    // Potentially render an empty state for the whole app
+                    // TODO: Render an empty state for the whole app
                     return;
                 };
                 renderStudentsList();
+                renderLayoutControls();
                 renderClassroomGrid();
                 updateStatistics();
                 updateClassStatusUI();
@@ -698,9 +759,20 @@
                     const savedState = localStorage.getItem('grelhaAtivaMultiClassState');
                     if (savedState) {
                         appState = JSON.parse(savedState);
-                        // Robustness: Recalculate next IDs to prevent reuse after deletion
+                        // --- Data Migration & Robustness ---
                         appState.nextClassId = (Math.max(0, ...Object.keys(appState.classes).map(id => parseInt(id.split('_')[1] || 0))) || 0) + 1;
                         Object.values(appState.classes).forEach(c => {
+                            // Migrate old single layout to new multi-layout structure
+                            if (c.classroomLayout && !c.layouts) {
+                                c.layouts = { 'Layout Padrão': c.classroomLayout };
+                                delete c.classroomLayout;
+                            }
+                            if (!c.layouts) {
+                                c.layouts = { 'Layout Padrão': {} };
+                            }
+                            if (!c.activeLayoutName || !c.layouts[c.activeLayoutName]) {
+                                c.activeLayoutName = Object.keys(c.layouts)[0] || 'Layout Padrão';
+                            }
                             c.nextStudentId = (Math.max(0, ...c.students.map(s => s.id)) || 0) + 1;
                         });
                     }
@@ -733,24 +805,28 @@
                     showConfirmation('Tem a certeza que deseja limpar os dados de interação desta turma? Esta ação não pode ser desfeita.', clearClassData);
                 });
                 DOMElements.showReportBtn.addEventListener('click', () => showModal('report-modal'));
-                DOMElements.saveStateBtn.addEventListener('click', () => {
-                    saveState();
-                    showToast('Estado da aplicação guardado com sucesso!', 'success');
-                });
                 document.getElementById('export-report-btn').addEventListener('click', exportReportToCSV);
 
+                // Modals
                 document.querySelectorAll('.modal__close, .modal__overlay').forEach(el => el.addEventListener('click', closeAllModals));
                 document.querySelectorAll('.modal__content').forEach(el => el.addEventListener('click', e => e.stopPropagation()));
                 document.getElementById('confirm-cancel-btn').addEventListener('click', closeAllModals);
+                DOMElements.promptCancelBtn.addEventListener('click', closeAllModals);
 
+                // Interaction Menu
                 document.getElementById('interaction-close').addEventListener('click', closeInteractionMenu);
                 document.querySelectorAll('.interaction-btn').forEach(btn => btn.addEventListener('click', handleInteraction));
 
-                // Class Management Listeners
+                // Class Management
                 DOMElements.createClassBtn.addEventListener('click', handleCreateClass);
                 DOMElements.classSelectDropdown.addEventListener('change', handleSelectClass);
                 DOMElements.renameClassBtn.addEventListener('click', handleRenameClass);
                 DOMElements.deleteClassBtn.addEventListener('click', handleDeleteClass);
+
+                // Layout Management
+                DOMElements.layoutSelect.addEventListener('change', handleSelectLayout);
+                DOMElements.saveLayoutBtn.addEventListener('click', handleSaveLayout);
+                DOMElements.manageLayoutsBtn.addEventListener('click', handleManageLayouts);
 
 
                 document.addEventListener('keydown', e => {
@@ -775,8 +851,6 @@
                     showToast("Erro ao ler o ficheiro.", "error");
                 }
                 reader.readAsText(file);
-                
-                // Reset input to allow re-uploading the same file
                 event.target.value = '';
             }
 
@@ -784,37 +858,22 @@
                 const activeClass = getActiveClass();
                 if (!activeClass) return;
 
-                // Simple parser for lines and columns (handles quoted fields)
                 const lines = csvText.split(/\r\n|\n/);
                 let importedCount = 0;
                 let skippedCount = 0;
 
-                // Skip header line (i=1)
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (line === '') continue;
 
-                    // Basic split by comma or semicolon, can be improved for complex CSVs
                     const parts = line.split(/[,;]/).map(p => p.trim().replace(/^"|"$/g, ''));
-                    
-                    if (parts.length < 2) {
-                        skippedCount++;
-                        continue;
-                    }
+                    if (parts.length < 2) { skippedCount++; continue; }
 
                     const name = parts[0];
                     const number = parts[1];
 
-                    if (!name || !number) {
-                        skippedCount++;
-                        continue;
-                    }
-
-                    // Check for existing student number
-                    if (activeClass.students.some(s => s.number === number)) {
-                        skippedCount++;
-                        continue;
-                    }
+                    if (!name || !number) { skippedCount++; continue; }
+                    if (activeClass.students.some(s => s.number === number)) { skippedCount++; continue; }
 
                     const newStudent = { id: activeClass.nextStudentId++, name, number };
                     activeClass.students.push(newStudent);
@@ -835,14 +894,19 @@
             }
 
 
-            // --- CLASS MANAGEMENT ---
+            // --- CLASS & LAYOUT MANAGEMENT ---
+            function getActiveClass() { return appState.classes[appState.activeClassId]; }
+            function getActiveLayout() {
+                const activeClass = getActiveClass();
+                if (!activeClass || !activeClass.layouts) return {};
+                return activeClass.layouts[activeClass.activeLayoutName] || {};
+            }
+
             function createNewClass(name, shouldSave = true) {
                 const newClassId = `class_${appState.nextClassId++}`;
-                appState.classes[newClassId] = {
-                    id: newClassId,
-                    name: name,
-                    ...JSON.parse(JSON.stringify(initialClassState)) // Deep copy
-                };
+                appState.classes[newClassId] = JSON.parse(JSON.stringify(initialClassState));
+                appState.classes[newClassId].id = newClassId;
+                appState.classes[newClassId].name = name;
                 appState.activeClassId = newClassId;
                 if (shouldSave) {
                     saveState();
@@ -864,11 +928,10 @@
             }
             
             function handleSelectClass(e) {
-                const selectedClassId = e.target.value;
-                appState.activeClassId = selectedClassId;
+                appState.activeClassId = e.target.value;
                 saveState();
                 renderAll();
-                closeAllModals(); // Close management modal on selection
+                closeAllModals();
             }
             
             function handleRenameClass() {
@@ -894,7 +957,6 @@
                 const className = getActiveClass().name;
                 showConfirmation(`Tem a certeza que deseja apagar a turma "${className}"? Todos os seus dados serão perdidos permanentemente.`, () => {
                     delete appState.classes[appState.activeClassId];
-                    // Set a new active class
                     appState.activeClassId = Object.keys(appState.classes)[0];
                     saveState();
                     populateClassManagementModal();
@@ -908,11 +970,34 @@
                     .map(c => `<option value="${c.id}" ${c.id === appState.activeClassId ? 'selected' : ''}>${c.name}</option>`)
                     .join('');
             }
-            
-            function getActiveClass() {
-                return appState.classes[appState.activeClassId];
+
+            function handleSelectLayout(e) {
+                const activeClass = getActiveClass();
+                activeClass.activeLayoutName = e.target.value;
+                saveState();
+                renderAll();
             }
 
+            function handleSaveLayout() {
+                const activeClass = getActiveClass();
+                showPrompt('Guardar Layout', 'Insira um nome para o layout:', activeClass.activeLayoutName)
+                    .then(name => {
+                        if (name) {
+                            const currentLayout = getActiveLayout();
+                            // Create a deep copy of the layout to save it
+                            activeClass.layouts[name] = JSON.parse(JSON.stringify(currentLayout));
+                            activeClass.activeLayoutName = name;
+                            saveState();
+                            renderLayoutControls();
+                            showToast(`Layout "${name}" guardado.`, 'success');
+                        }
+                    });
+            }
+
+            function handleManageLayouts() {
+                renderManageLayoutsModal();
+                showModal('manage-layouts-modal');
+            }
 
             // --- RENDERING ---
             function updateHeader() {
@@ -921,13 +1006,14 @@
 
             function renderStudentsList() {
                 const activeClass = getActiveClass();
-                const studentsInGridIds = new Set(Object.values(activeClass.classroomLayout).filter(Boolean).map(s => s.id));
+                const activeLayout = getActiveLayout();
+                const studentsInGridIds = new Set(Object.values(activeLayout).filter(Boolean).map(s => s.id));
                 const availableStudents = activeClass.students.filter(student => !studentsInGridIds.has(student.id));
 
                 if (activeClass.students.length === 0) {
-                     DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhum aluno nesta turma. Adicione alunos manualmente ou importe um ficheiro CSV.</p></div>`;
+                     DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhum aluno nesta turma.</p></div>`;
                 } else if (availableStudents.length === 0) {
-                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão na grelha.</p></div>`;
+                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão no layout.</p></div>`;
                 } else {
                     DOMElements.studentsList.innerHTML = availableStudents.map(student => `
                         <div class="student-item" draggable="true" data-student-id="${student.id}">
@@ -943,14 +1029,13 @@
                     `).join('');
                 }
 
-                // Delegate events from the list container
                 DOMElements.studentsList.onclick = (e) => {
                     const removeBtn = e.target.closest('.student-remove');
                     if (removeBtn) {
                         const studentId = parseInt(removeBtn.dataset.studentId);
                         const student = activeClass.students.find(s => s.id === studentId);
                         if(student) {
-                            showConfirmation(`Tem a certeza que deseja remover o aluno ${student.name}?`, () => removeStudent(studentId));
+                            showConfirmation(`Tem a certeza que deseja remover o aluno ${student.name}? Esta ação irá removê-lo de todos os layouts.`, () => removeStudent(studentId));
                         }
                         return;
                     }
@@ -963,12 +1048,20 @@
                 };
             }
 
+            function renderLayoutControls() {
+                const activeClass = getActiveClass();
+                DOMElements.layoutSelect.innerHTML = Object.keys(activeClass.layouts)
+                    .map(name => `<option value="${name}" ${name === activeClass.activeLayoutName ? 'selected' : ''}>${name}</option>`)
+                    .join('');
+            }
+
             function renderClassroomGrid() {
                 const activeClass = getActiveClass();
+                const activeLayout = getActiveLayout();
                 const participationStats = getParticipationStats();
                 const gridHtml = [];
                 for (let i = 0; i < 36; i++) {
-                    const student = activeClass.classroomLayout[i];
+                    const student = activeLayout[i];
                     const hasInteractions = student && participationStats.studentTotals[student.id] > 0;
                     const interactionCount = student ? (participationStats.studentTotals[student.id] || 0) : 0;
                     
@@ -996,75 +1089,59 @@
 
             function updateClassStatusUI() {
                 const activeClass = getActiveClass();
-                if (activeClass.isClassActive) {
-                    DOMElements.toggleClassBtn.textContent = 'Terminar Aula';
-                    DOMElements.toggleClassBtn.classList.replace('btn--primary', 'btn--outline');
-                    DOMElements.classStatus.innerHTML = '<span class="status status--success">Aula Ativa</span>';
-                    DOMElements.statistics.style.display = 'block';
-                    DOMElements.showReportBtn.style.display = 'block';
-                } else {
-                    DOMElements.toggleClassBtn.textContent = 'Iniciar Aula';
-                    DOMElements.toggleClassBtn.classList.replace('btn--outline', 'btn--primary');
-                    DOMElements.classStatus.innerHTML = '<span class="status status--info">Configuração</span>';
-                    DOMElements.statistics.style.display = 'none';
-                    DOMElements.showReportBtn.style.display = 'none';
-                }
+                const isClassActive = activeClass.isClassActive;
+                DOMElements.toggleClassBtn.textContent = isClassActive ? 'Terminar Aula' : 'Iniciar Aula';
+                DOMElements.toggleClassBtn.classList.toggle('btn--primary', !isClassActive);
+                DOMElements.toggleClassBtn.classList.toggle('btn--outline', isClassActive);
+                DOMElements.classStatus.innerHTML = isClassActive ? '<span class="status status--success">Aula Ativa</span>' : '<span class="status status--info">Configuração</span>';
+                DOMElements.statistics.style.display = isClassActive ? 'block' : 'none';
+                DOMElements.showReportBtn.style.display = isClassActive ? 'block' : 'none';
+
+                // Disable layout editing when class is active
+                DOMElements.layoutSelect.disabled = isClassActive;
+                DOMElements.saveLayoutBtn.disabled = isClassActive;
+                DOMElements.manageLayoutsBtn.disabled = isClassActive;
             }
 
             // --- DRAG AND DROP ---
             function setupDragAndDrop() {
                 const isClassActive = getActiveClass().isClassActive;
+                if (isClassActive) return; // Disable all D&D if class is active
                 
-                // Drag from student list
                 document.querySelectorAll('.student-item').forEach(item => {
                     item.addEventListener('dragstart', e => {
-                        if (isClassActive) { e.preventDefault(); return; }
                         e.dataTransfer.setData('text/plain', e.target.dataset.studentId);
                         e.target.classList.add('dragging');
                     });
                     item.addEventListener('dragend', e => e.target.classList.remove('dragging'));
                 });
 
-                // Drag from grid cells
                 DOMElements.classroomGrid.querySelectorAll('.grid-cell.occupied').forEach(cell => {
-                    if (!isClassActive) {
-                        cell.setAttribute('draggable', 'true');
-                        cell.addEventListener('dragstart', e => {
-                            e.stopPropagation();
-                            e.dataTransfer.setData('text/plain', e.currentTarget.dataset.studentId);
-                            e.dataTransfer.setData('origin-cell', e.currentTarget.dataset.cellIndex);
-                            setTimeout(() => e.target.style.opacity = '0.5', 0);
-                        });
-                         cell.addEventListener('dragend', e => e.target.style.opacity = '1');
-                    } else {
-                        cell.removeAttribute('draggable');
-                    }
+                    cell.setAttribute('draggable', 'true');
+                    cell.addEventListener('dragstart', e => {
+                        e.stopPropagation();
+                        e.dataTransfer.setData('text/plain', e.currentTarget.dataset.studentId);
+                        e.dataTransfer.setData('origin-cell', e.currentTarget.dataset.cellIndex);
+                        setTimeout(() => e.target.style.opacity = '0.5', 0);
+                    });
+                     cell.addEventListener('dragend', e => e.target.style.opacity = '1');
                 });
 
-                // Drop on grid cells
                 DOMElements.classroomGrid.querySelectorAll('.grid-cell').forEach(cell => {
-                    cell.addEventListener('dragover', e => {
-                        e.preventDefault();
-                        if (isClassActive) return;
-                        e.currentTarget.classList.add('drag-over');
-                    });
+                    cell.addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); });
                     cell.addEventListener('dragleave', e => e.currentTarget.classList.remove('drag-over'));
                     cell.addEventListener('drop', handleDropOnGrid);
                 });
 
-                // Drop on student list (to remove from grid)
                 DOMElements.studentsList.addEventListener('dragover', e => {
                     e.preventDefault();
-                    if (isClassActive) return;
-                    const originCell = e.dataTransfer.getData('origin-cell');
-                    if (originCell) { // Only allow drops from the grid
+                    if (e.dataTransfer.getData('origin-cell')) {
                         DOMElements.studentsList.classList.add('drag-over');
                     }
                 });
                 DOMElements.studentsList.addEventListener('dragleave', () => DOMElements.studentsList.classList.remove('drag-over'));
                 DOMElements.studentsList.addEventListener('drop', handleDropOnList);
                 
-                // Click/DblClick on grid cells
                 DOMElements.classroomGrid.querySelectorAll('.grid-cell.occupied').forEach(cell => {
                     cell.addEventListener('click', e => handleCellClick(e.currentTarget));
                     cell.addEventListener('dblclick', e => handleCellDoubleClick(e.currentTarget));
@@ -1073,30 +1150,22 @@
 
             function handleDropOnGrid(e) {
                 e.preventDefault();
-                const activeClass = getActiveClass();
-                if (activeClass.isClassActive) return;
+                if (getActiveClass().isClassActive) return;
                 e.currentTarget.classList.remove('drag-over');
 
                 const studentId = parseInt(e.dataTransfer.getData('text/plain'));
                 const targetCellIndex = parseInt(e.currentTarget.dataset.cellIndex);
-                const originCellIndex = e.dataTransfer.getData('origin-cell'); // Will be string or empty
-                const student = activeClass.students.find(s => s.id === studentId);
-                
+                const originCellIndex = e.dataTransfer.getData('origin-cell');
+                const student = getActiveClass().students.find(s => s.id === studentId);
                 if (!student) return;
 
-                const studentInTargetCell = activeClass.classroomLayout[targetCellIndex];
+                const activeLayout = getActiveLayout();
+                const studentInTargetCell = activeLayout[targetCellIndex];
 
-                // If dragging from another cell, clear the origin
-                if (originCellIndex) {
-                    delete activeClass.classroomLayout[originCellIndex];
-                }
-                
-                // Place the dragged student in the target cell
-                activeClass.classroomLayout[targetCellIndex] = student;
-
-                // If there was a student in the target cell and we came from another cell, swap them
+                if (originCellIndex) delete activeLayout[originCellIndex];
+                activeLayout[targetCellIndex] = student;
                 if (studentInTargetCell && originCellIndex) {
-                    activeClass.classroomLayout[originCellIndex] = studentInTargetCell;
+                    activeLayout[originCellIndex] = studentInTargetCell;
                 }
 
                 saveState();
@@ -1105,14 +1174,12 @@
             
             function handleDropOnList(e) {
                 e.preventDefault();
-                const activeClass = getActiveClass();
-                if (activeClass.isClassActive) return;
+                if (getActiveClass().isClassActive) return;
                 DOMElements.studentsList.classList.remove('drag-over');
                 
                 const originCellIndex = e.dataTransfer.getData('origin-cell');
-                // Only act if the student was dragged from the grid
                 if (originCellIndex) {
-                    delete activeClass.classroomLayout[originCellIndex];
+                    delete getActiveLayout()[originCellIndex];
                     saveState();
                     renderAll();
                 }
@@ -1145,15 +1212,8 @@
                 const name = document.getElementById('edit-student-name').value.trim();
                 const number = document.getElementById('edit-student-number').value.trim();
 
-                if (!name || !number) {
-                    showToast('Por favor preencha todos os campos.', 'error');
-                    return;
-                }
-
-                if (activeClass.students.some(s => s.number === number && s.id !== studentId)) {
-                    showToast('Já existe outro aluno com este número nesta turma.', 'error');
-                    return;
-                }
+                if (!name || !number) return showToast('Por favor preencha todos os campos.', 'error');
+                if (activeClass.students.some(s => s.number === number && s.id !== studentId)) return showToast('Já existe outro aluno com este número nesta turma.', 'error');
 
                 const studentToUpdate = activeClass.students.find(s => s.id === studentId);
                 if (studentToUpdate) {
@@ -1161,12 +1221,13 @@
                     studentToUpdate.number = number;
                 }
 
-                // Also update the student object if it's in the grid
-                Object.keys(activeClass.classroomLayout).forEach(key => {
-                    if (activeClass.classroomLayout[key]?.id === studentId) {
-                        activeClass.classroomLayout[key].name = name;
-                        activeClass.classroomLayout[key].number = number;
-                    }
+                Object.values(activeClass.layouts).forEach(layout => {
+                    Object.keys(layout).forEach(key => {
+                        if (layout[key]?.id === studentId) {
+                            layout[key].name = name;
+                            layout[key].number = number;
+                        }
+                    });
                 });
 
                 closeAllModals();
@@ -1180,17 +1241,16 @@
                 const student = activeClass.students.find(s => s.id === studentId);
                 if (!student) return;
 
-                // Remove from main students list
                 activeClass.students = activeClass.students.filter(s => s.id !== studentId);
                 
-                // Remove from grid
-                Object.keys(activeClass.classroomLayout).forEach(key => {
-                    if (activeClass.classroomLayout[key]?.id === studentId) {
-                        delete activeClass.classroomLayout[key];
-                    }
+                Object.values(activeClass.layouts).forEach(layout => {
+                    Object.keys(layout).forEach(key => {
+                        if (layout[key]?.id === studentId) {
+                            delete layout[key];
+                        }
+                    });
                 });
                 
-                // Remove from interactions
                 delete activeClass.interactions[studentId];
 
                 showToast(`Aluno ${student.name} removido com sucesso.`, 'success');
@@ -1205,18 +1265,17 @@
                     showToast('Aula iniciada! Clique nos alunos para registar interações.', 'success');
                 } else {
                     showToast('Aula terminada.', 'info');
-                    // Automatically show report after a short delay
                     setTimeout(() => showModal('report-modal'), 1000);
                 }
                 saveState();
-                renderAll(); // Re-render to apply/remove draggable attributes etc.
+                renderAll();
             }
 
             function clearClassData() {
                 const activeClass = getActiveClass();
                 activeClass.interactions = {};
                 if (activeClass.isClassActive) {
-                    toggleClass(); // This will stop the class, re-render, and save
+                    toggleClass();
                 } else {
                     saveState();
                     renderAll();
@@ -1234,14 +1293,13 @@
             
             function handleCellDoubleClick(cell) {
                 const activeClass = getActiveClass();
-                // Allow removing from grid only when class is NOT active
                 if (activeClass.isClassActive) return; 
                 
                 const cellIndex = parseInt(cell.dataset.cellIndex);
-                const student = activeClass.classroomLayout[cellIndex];
+                const student = getActiveLayout()[cellIndex];
                 if (student) {
-                    delete activeClass.classroomLayout[cellIndex];
-                    showToast(`${student.name} removido da grelha.`, 'info');
+                    delete getActiveLayout()[cellIndex];
+                    showToast(`${student.name} removido do layout.`, 'info');
                     saveState();
                     renderAll();
                 }
@@ -1266,40 +1324,26 @@
 
             function handleRandomStudentSelection() {
                 const activeClass = getActiveClass();
-                if (!activeClass.isClassActive) {
-                    showToast("Inicie a aula para selecionar um aluno aleatoriamente.", "info");
-                    return;
-                }
+                if (!activeClass.isClassActive) return showToast("Inicie a aula para selecionar um aluno.", "info");
 
-                const studentsInGrid = Object.entries(activeClass.classroomLayout)
+                const studentsInGrid = Object.entries(getActiveLayout())
                     .filter(([, student]) => student)
                     .map(([cellIndex, student]) => ({ ...student, cellIndex }));
 
-                if (studentsInGrid.length === 0) {
-                    showToast("Não há alunos na grelha para selecionar.", "warning");
-                    return;
-                }
+                if (studentsInGrid.length === 0) return showToast("Não há alunos no layout para selecionar.", "warning");
                 
                 const participationStats = getParticipationStats();
                 const nonParticipants = studentsInGrid.filter(s => participationStats.studentTotals[s.id] === 0);
-
-                // Prioritize students who haven't participated yet
                 const pool = nonParticipants.length > 0 ? nonParticipants : studentsInGrid;
                 
-                const randomIndex = Math.floor(Math.random() * pool.length);
-                const selectedStudent = pool[randomIndex];
-
+                const selectedStudent = pool[Math.floor(Math.random() * pool.length)];
                 const cell = DOMElements.classroomGrid.querySelector(`[data-cell-index="${selectedStudent.cellIndex}"]`);
                 if (cell) {
-                    cell.classList.remove('highlight'); // Reset animation
-                    void cell.offsetWidth; // Trigger reflow
+                    cell.classList.remove('highlight');
+                    void cell.offsetWidth;
                     cell.classList.add('highlight');
-                    
-                    setTimeout(() => {
-                         cell.classList.remove('highlight');
-                    }, 3000);
+                    setTimeout(() => cell.classList.remove('highlight'), 3000);
                 }
-
                 showToast(`Aluno selecionado: ${selectedStudent.name}`, 'success');
             }
 
@@ -1318,29 +1362,50 @@
             }
 
             function openEditStudentModal(studentId) {
-                const activeClass = getActiveClass();
-                const student = activeClass.students.find(s => s.id === studentId);
+                const student = getActiveClass().students.find(s => s.id === studentId);
                 if (!student) return;
-
                 document.getElementById('edit-student-id').value = student.id;
                 document.getElementById('edit-student-name').value = student.name;
                 document.getElementById('edit-student-number').value = student.number;
-
                 showModal('edit-student-modal');
             }
 
             function showConfirmation(message, onConfirm) {
                 DOMElements.confirmModalText.textContent = message;
-                // Clone and replace the button to remove old listeners
-                const newOkBtn = DOMElements.confirmOkBtn.cloneNode(true);
-                DOMElements.confirmOkBtn.parentNode.replaceChild(newOkBtn, DOMElements.confirmOkBtn);
-                DOMElements.confirmOkBtn = newOkBtn;
-
-                DOMElements.confirmOkBtn.addEventListener('click', () => {
+                DOMElements.confirmOkBtn.onclick = () => {
                     closeAllModals();
                     onConfirm();
-                });
+                };
                 showModal('confirm-modal');
+            }
+
+            function showPrompt(title, text, defaultValue = '') {
+                return new Promise((resolve) => {
+                    DOMElements.promptTitle.textContent = title;
+                    DOMElements.promptText.textContent = text;
+                    DOMElements.promptInput.value = defaultValue;
+                    showModal('prompt-modal');
+
+                    const formHandler = (e) => {
+                        e.preventDefault();
+                        cleanup();
+                        resolve(DOMElements.promptInput.value.trim());
+                    };
+
+                    const cancelHandler = () => {
+                        cleanup();
+                        resolve(null);
+                    };
+
+                    function cleanup() {
+                        DOMElements.promptForm.removeEventListener('submit', formHandler);
+                        DOMElements.promptCancelBtn.removeEventListener('click', cancelHandler);
+                        closeAllModals();
+                    }
+
+                    DOMElements.promptForm.addEventListener('submit', formHandler);
+                    DOMElements.promptCancelBtn.addEventListener('click', cancelHandler);
+                });
             }
 
             function showInteractionMenu(cell, student) {
@@ -1349,20 +1414,11 @@
                 menu.dataset.studentId = student.id;
                 document.getElementById('interaction-student-name').textContent = student.name;
                 
-                // Position menu below the cell by default
+                menu.classList.add('active');
                 let top = rect.bottom + 5;
                 let left = rect.left;
-
-                menu.classList.add('active'); // Make it visible to calculate dimensions
-
-                // Adjust if it goes off-screen
-                if (top + menu.offsetHeight > window.innerHeight) {
-                    top = rect.top - menu.offsetHeight - 5;
-                }
-                if (left + menu.offsetWidth > window.innerWidth) {
-                    left = rect.right - menu.offsetWidth;
-                }
-                
+                if (top + menu.offsetHeight > window.innerHeight) top = rect.top - menu.offsetHeight - 5;
+                if (left + menu.offsetWidth > window.innerWidth) left = rect.right - menu.offsetWidth;
                 menu.style.top = `${top}px`;
                 menu.style.left = `${left}px`;
             }
@@ -1371,6 +1427,59 @@
                 DOMElements.interactionMenu.classList.remove('active');
             }
             
+            function renderManageLayoutsModal() {
+                const activeClass = getActiveClass();
+                const layouts = activeClass.layouts;
+                DOMElements.manageLayoutsList.innerHTML = Object.keys(layouts).map(name => `
+                    <div class="participation-item">
+                        <span>${name}</span>
+                        <div>
+                            <button class="btn btn--outline btn--sm rename-layout-btn" data-name="${name}">Renomear</button>
+                            <button class="btn btn--danger btn--sm delete-layout-btn" data-name="${name}" ${Object.keys(layouts).length <= 1 ? 'disabled' : ''}>Apagar</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                DOMElements.manageLayoutsList.querySelectorAll('.rename-layout-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        const oldName = e.target.dataset.name;
+                        showPrompt('Renomear Layout', `Insira o novo nome para "${oldName}":`, oldName)
+                            .then(newName => {
+                                if (newName && newName !== oldName) {
+                                    if (layouts[newName]) {
+                                        showToast(`Já existe um layout com o nome "${newName}".`, 'error');
+                                    } else {
+                                        layouts[newName] = layouts[oldName];
+                                        delete layouts[oldName];
+                                        if (activeClass.activeLayoutName === oldName) {
+                                            activeClass.activeLayoutName = newName;
+                                        }
+                                        saveState();
+                                        renderLayoutControls();
+                                        renderManageLayoutsModal(); // Refresh the list
+                                    }
+                                }
+                            });
+                    });
+                });
+
+                DOMElements.manageLayoutsList.querySelectorAll('.delete-layout-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        const nameToDelete = e.target.dataset.name;
+                        showConfirmation(`Tem a certeza que deseja apagar o layout "${nameToDelete}"?`, () => {
+                            delete layouts[nameToDelete];
+                            if (activeClass.activeLayoutName === nameToDelete) {
+                                activeClass.activeLayoutName = Object.keys(layouts)[0];
+                            }
+                            saveState();
+                            renderLayoutControls();
+                            renderClassroomGrid();
+                            renderManageLayoutsModal();
+                        });
+                    });
+                });
+            }
+
             // --- REPORTING & DATA ---
             function getParticipationStats() {
                 const activeClass = getActiveClass();
@@ -1383,24 +1492,21 @@
                     studentTotals[student.id] = count;
                     totalInteractions += count;
                 }
-
                 const participatingStudentsCount = Object.values(studentTotals).filter(count => count > 0).length;
-
                 return { studentTotals, totalInteractions, participatingStudentsCount };
             }
 
             function generateReport() {
                 const activeClass = getActiveClass();
                 const participationStats = getParticipationStats();
-                const studentsInGrid = Object.values(activeClass.classroomLayout).filter(Boolean);
+                const studentsInGrid = Object.values(getActiveLayout()).filter(Boolean);
 
                 const lowParticipationStudents = studentsInGrid
                     .filter(student => participationStats.studentTotals[student.id] === 0)
                     .sort((a, b) => a.name.localeCompare(b.name));
                 
-                const lowParticipationList = document.getElementById('low-participation-list');
-                lowParticipationList.innerHTML = lowParticipationStudents.length === 0
-                    ? `<div class="participation-item"><span>🎉 Todos os alunos na grelha participaram!</span></div>`
+                document.getElementById('low-participation-list').innerHTML = lowParticipationStudents.length === 0
+                    ? `<div class="participation-item"><span>🎉 Todos os alunos no layout participaram!</span></div>`
                     : lowParticipationStudents.map(s => `<div class="participation-item"><span>${s.name} (Nº ${s.number})</span><span class="status status--warning">Sem participação</span></div>`).join('');
 
                 const interactionDetailsContainer = document.getElementById('interaction-details-container');
@@ -1409,12 +1515,9 @@
                 for (const [studentId, studentInteractions] of Object.entries(activeClass.interactions)) {
                     const student = activeClass.students.find(s => s.id === parseInt(studentId));
                     if (!student) continue;
-
                     for (const [type, count] of Object.entries(studentInteractions)) {
                         if (count > 0) {
-                            if (!interactionsByType[type]) {
-                                interactionsByType[type] = { total: 0, students: [] };
-                            }
+                            if (!interactionsByType[type]) interactionsByType[type] = { total: 0, students: [] };
                             interactionsByType[type].total += count;
                             interactionsByType[type].students.push({ name: student.name, count });
                         }
@@ -1450,8 +1553,6 @@
             function exportReportToCSV() {
                 const activeClass = getActiveClass();
                 let csvContent = "data:text/csv;charset=utf-8,";
-                
-                // Helper to sanitize CSV fields
                 const sanitizeField = (field) => `"${String(field).replace(/"/g, '""')}"`;
 
                 csvContent += `Relatorio da Turma;${sanitizeField(activeClass.name)}\r\n`;
@@ -1459,15 +1560,15 @@
                 csvContent += `Data;${now.toLocaleDateString('pt-PT')}\r\n`;
                 csvContent += `Hora;${now.toLocaleTimeString('pt-PT')}\r\n\r\n`;
 
-                csvContent += "Alunos Sem Participacao\r\n";
+                csvContent += "Alunos Sem Participacao (no layout ativo)\r\n";
                 csvContent += "Nome do Aluno;Numero\r\n";
                 
                 const participationStats = getParticipationStats();
-                const studentsInGrid = Object.values(activeClass.classroomLayout).filter(Boolean);
+                const studentsInGrid = Object.values(getActiveLayout()).filter(Boolean);
                 const lowParticipationStudents = studentsInGrid.filter(student => participationStats.studentTotals[student.id] === 0);
 
                 if (lowParticipationStudents.length === 0) {
-                    csvContent += "Todos os alunos na grelha participaram.;\r\n";
+                    csvContent += "Todos os alunos no layout participaram.;\r\n";
                 } else {
                     lowParticipationStudents.forEach(student => {
                         csvContent += `${sanitizeField(student.name)};${sanitizeField(student.number)}\r\n`;
@@ -1475,20 +1576,16 @@
                 }
                 csvContent += "\r\n";
 
-                csvContent += "Detalhe Geral das Interacoes\r\n";
+                csvContent += "Detalhe Geral das Interacoes (toda a turma)\r\n";
                 csvContent += "Numero do Aluno;Nome do Aluno;Total de Interacoes";
-                Object.values(interactionTypes).forEach(type => {
-                    csvContent += `;${sanitizeField(type.label)}`;
-                });
+                Object.values(interactionTypes).forEach(type => { csvContent += `;${sanitizeField(type.label)}`; });
                 csvContent += "\r\n";
 
                 activeClass.students.sort((a, b) => a.name.localeCompare(b.name)).forEach(student => {
                     const studentInteractions = activeClass.interactions[student.id] || {};
                     const total = participationStats.studentTotals[student.id] || 0;
                     let row = `${sanitizeField(student.number)};${sanitizeField(student.name)};${total}`;
-                    Object.keys(interactionTypes).forEach(typeKey => {
-                        row += `;${studentInteractions[typeKey] || 0}`;
-                    });
+                    Object.keys(interactionTypes).forEach(typeKey => { row += `;${studentInteractions[typeKey] || 0}`; });
                     csvContent += `${row}\r\n`;
                 });
 

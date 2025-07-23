@@ -6,36 +6,41 @@
     <title>Grelha Ativa - Monitorização da Participação</title>
     <style>
         :root {
-            /* Paleta de Cores Primitiva */
-            --color-white: #fff;
-            --color-black: #000;
-            --color-cream-50: #fcfcf9;
-            --color-cream-100: #fffffD;
-            --color-gray-200: #f5f5f5;
-            --color-gray-300: #a7a9a9;
-            --color-gray-400: #777c7c;
-            --color-slate-500: #626c71;
-            --color-brown-600: #5e5240;
-            --color-charcoal-700: #1f2121;
-            --color-charcoal-800: #262828;
-            --color-slate-900: #13343b;
-            --color-teal-300: #32b8c6;
-            --color-teal-400: #2da6b2;
-            --color-teal-500: #21808d;
-            --color-teal-600: #1d7480;
-            --color-teal-700: #1a6873;
-            --color-red-400: #ff5459;
-            --color-red-500: #c0152f;
-            --color-orange-400: #e68161;
-            --color-orange-500: #a84b2f;
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
 
-            /* Cores RGB para controlo de opacidade */
+            /* RGB versions for opacity control */
             --color-brown-600-rgb: 94, 82, 64;
             --color-teal-500-rgb: 33, 128, 141;
             --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
             --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-orange-400-rgb: 230, 129, 97;
 
-            /* Tokens de Cor Semânticos (Modo Claro) */
+            /* Semantic Color Tokens (Light Mode) */
             --color-background: var(--color-cream-50);
             --color-surface: var(--color-cream-100);
             --color-text: var(--color-slate-900);
@@ -45,17 +50,25 @@
             --color-primary-active: var(--color-teal-700);
             --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
             --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
             --color-border: rgba(var(--color-brown-600-rgb), 0.2);
             --color-btn-primary-text: var(--color-cream-50);
             --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
             --color-error: var(--color-red-500);
             --color-success: var(--color-teal-500);
             --color-warning: var(--color-orange-500);
             --color-info: var(--color-slate-500);
             --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+            --color-success-rgb: 33, 128, 141;
+            --color-error-rgb: 192, 21, 47;
+            --color-warning-rgb: 168, 75, 47;
+            --color-info-rgb: 98, 108, 113;
 
-            /* Tipografia */
+            /* Typography */
             --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             --font-size-xs: 11px;
             --font-size-sm: 12px;
             --font-size-base: 14px;
@@ -65,26 +78,31 @@
             --font-size-3xl: 24px;
             --font-weight-normal: 400;
             --font-weight-medium: 500;
+            --font-weight-semibold: 550;
             --font-weight-bold: 600;
+            --line-height-tight: 1.2;
+            --line-height-normal: 1.5;
 
-            /* Espaçamento */
+            /* Spacing */
+            --space-2: 2px;
             --space-4: 4px;
             --space-8: 8px;
             --space-12: 12px;
             --space-16: 16px;
+            --space-20: 20px;
             --space-24: 24px;
 
-            /* Raio da Borda */
+            /* Border Radius */
             --radius-sm: 6px;
             --radius-base: 8px;
             --radius-lg: 12px;
             --radius-full: 9999px;
 
-            /* Sombras */
+            /* Shadows */
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
 
-            /* Animação */
+            /* Animation */
             --duration-normal: 250ms;
             --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -92,13 +110,12 @@
             --container-xl: 1280px;
         }
 
-        /* Estilos Base */
+        /* Base styles */
         html {
             font-family: var(--font-family-base);
             color: var(--color-text);
             background-color: var(--color-background);
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             box-sizing: border-box;
         }
 
@@ -111,10 +128,10 @@
             box-sizing: inherit;
         }
 
-        h3 { font-size: var(--font-size-xl); margin: 0; }
-        h4 { font-size: var(--font-size-lg); margin: 0; }
+        h3 { font-size: var(--font-size-xl); }
+        h4 { font-size: var(--font-size-lg); }
 
-        /* Botões */
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -122,28 +139,29 @@
             padding: var(--space-8) var(--space-16);
             border-radius: var(--radius-base);
             font-size: var(--font-size-base);
-            font-weight: var(--font-weight-medium);
+            font-weight: 500;
             cursor: pointer;
             transition: all var(--duration-normal) var(--ease-standard);
-            border: 1px solid transparent;
-            text-decoration: none;
+            border: none;
         }
-        .btn:focus-visible {
-            outline: 2px solid var(--color-focus-ring);
-            outline-offset: 2px;
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
-        .btn--primary { background-color: var(--color-primary); color: var(--color-btn-primary-text); }
-        .btn--primary:hover { background-color: var(--color-primary-hover); }
-        .btn--secondary { background-color: var(--color-secondary); color: var(--color-text); }
-        .btn--secondary:hover { background-color: var(--color-secondary-hover); }
-        .btn--outline { background-color: transparent; border-color: var(--color-border); color: var(--color-text); }
-        .btn--outline:hover { background-color: var(--color-secondary); }
-        .btn--danger { background-color: var(--color-error); color: var(--color-white); }
-        .btn--danger:hover { background-color: rgba(var(--color-red-500-rgb), 0.85); }
+        .btn:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+        .btn--primary { background: var(--color-primary); color: var(--color-btn-primary-text); }
+        .btn--primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+        .btn--secondary { background: var(--color-secondary); color: var(--color-text); }
+        .btn--secondary:hover:not(:disabled) { background: var(--color-secondary-hover); }
+        .btn--outline { background: transparent; border: 1px solid var(--color-border); color: var(--color-text); }
+        .btn--outline:hover:not(:disabled) { background: var(--color-secondary); }
         .btn--sm { padding: var(--space-4) var(--space-12); font-size: var(--font-size-sm); border-radius: var(--radius-sm); }
         .btn--full-width { width: 100%; }
+        .btn--danger { background-color: var(--color-error); color: var(--color-white); }
+        .btn--danger:hover:not(:disabled) { background-color: rgba(var(--color-red-500-rgb), 0.8); }
 
-        /* Formulários */
+
+        /* Form elements */
         .form-control {
             display: block;
             width: 100%;
@@ -156,7 +174,7 @@
         .form-label { display: block; margin-bottom: var(--space-8); font-weight: var(--font-weight-medium); font-size: var(--font-size-sm); }
         .form-group { margin-bottom: var(--space-16); }
 
-        /* Componente Card */
+        /* Card component */
         .card {
             background-color: var(--color-surface);
             border-radius: var(--radius-lg);
@@ -165,71 +183,99 @@
             padding: var(--space-16);
         }
 
-        /* Indicadores de Estado */
+        /* Status indicators */
         .status { display: inline-flex; padding: var(--space-4) var(--space-12); border-radius: var(--radius-full); font-weight: var(--font-weight-medium); font-size: var(--font-size-sm); }
-        .status--success { background-color: rgba(var(--color-teal-500-rgb), 0.15); color: var(--color-success); }
-        .status--info { background-color: rgba(var(--color-slate-900-rgb), 0.1); color: var(--color-info); }
-        .status--warning { background-color: rgba(var(--color-orange-500), 0.15); color: var(--color-warning); }
+        .status--success { background-color: rgba(var(--color-success-rgb), 0.15); color: var(--color-success); }
+        .status--info { background-color: rgba(var(--color-info-rgb), 0.15); color: var(--color-info); }
+        .status--warning { background-color: rgba(var(--color-warning-rgb), 0.15); color: var(--color-warning); }
 
-        /* Layout do Container */
+        /* Container layout */
         .container { width: 100%; margin: 0 auto; padding: 0 var(--space-16); max-width: var(--container-xl); }
 
-        /* Estilos Específicos da Aplicação */
+        /* Application-specific styles */
         .app-container { min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* Cabeçalho */
+        /* Header */
         .header { background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: var(--space-16) 0; box-shadow: var(--shadow-sm); }
         .header .container { display: flex; align-items: center; justify-content: space-between; }
         .header__title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin: 0; }
-        .class-selector { font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); color: var(--color-text-secondary); cursor: pointer; border-bottom: 2px dotted var(--color-text-secondary); padding-bottom: 2px; transition: color var(--duration-normal), border-color var(--duration-normal); }
-        .class-selector:hover { color: var(--color-primary); border-color: var(--color-primary); }
+        
+        .class-selector {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-bottom: 2px dotted var(--color-text-secondary);
+            padding-bottom: 2px;
+        }
+        .class-selector:hover {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
 
-        /* Conteúdo Principal */
+
+        /* Main Content */
         .main-content { flex: 1; padding: var(--space-24) 0; }
-        .layout-container { display: grid; grid-template-columns: 280px 1fr 280px; gap: var(--space-24); }
+        .layout-container { display: grid; grid-template-columns: 280px 1fr 280px; gap: var(--space-24); min-height: calc(100vh - 120px); }
 
-        /* Painéis */
+        /* Panels */
         .students-panel, .control-panel { height: fit-content; max-height: calc(100vh - 160px); display: flex; flex-direction: column; }
-        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-card-border); }
-        .students-list { min-height: 200px; margin-bottom: var(--space-16); overflow-y: auto; }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-card-border-inner); }
+        .panel-header h3 { margin: 0; }
+        .students-list { min-height: 200px; margin-bottom: var(--space-16); overflow-y: auto; padding: 4px; border-radius: var(--radius-base); }
         .panel-actions { margin-top: auto; display: flex; gap: var(--space-8); }
 
-        .student-item { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12); margin-bottom: var(--space-8); background-color: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); cursor: grab; user-select: none; transition: background-color var(--duration-normal); }
+        .student-item { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12); margin-bottom: var(--space-8); background-color: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); cursor: grab; user-select: none; }
         .student-item:hover { background-color: var(--color-secondary); }
         .student-name { font-weight: var(--font-weight-medium); }
         .student-number { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+        
         .student-actions { display: flex; align-items: center; gap: var(--space-4); }
-        .student-action-btn { background: none; border: none; font-size: var(--font-size-lg); cursor: pointer; padding: var(--space-4); border-radius: var(--radius-sm); transition: color var(--duration-normal), background-color var(--duration-normal); }
-        .student-action-btn.edit { color: var(--color-info); }
-        .student-action-btn.edit:hover { color: var(--color-primary); background-color: var(--color-secondary); }
-        .student-action-btn.remove { color: var(--color-error); }
-        .student-action-btn.remove:hover { background-color: rgba(var(--color-red-500-rgb), 0.1); }
+        .student-edit, .student-remove { background: none; border: none; font-size: var(--font-size-lg); cursor: pointer; padding: var(--space-4); border-radius: var(--radius-sm); }
+        .student-edit { color: var(--color-info); }
+        .student-edit:hover { color: var(--color-primary); background-color: var(--color-secondary); }
+        .student-remove { color: var(--color-error); }
+        .student-remove:hover { background-color: rgba(var(--color-error-rgb), 0.1); }
 
-        /* Secção da Sala de Aula */
+
+        /* Classroom Section */
         .classroom-section { display: flex; flex-direction: column; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); }
+        .layout-controls { display: flex; align-items: center; gap: var(--space-8); margin-bottom: var(--space-16); }
+        .layout-controls .form-control { flex: 1; }
         .classroom-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); gap: var(--space-8); flex: 1; background-color: var(--color-surface); padding: var(--space-16); border: 1px solid var(--color-card-border); border-radius: var(--radius-lg); }
 
         .grid-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-8); border-radius: var(--radius-base); transition: all var(--duration-normal) var(--ease-standard); position: relative; }
-        .grid-cell.empty { border: 2px dashed var(--color-border); background-color: rgba(var(--color-slate-900-rgb), 0.02); }
+        .grid-cell.empty { border: 2px dashed var(--color-border); background-color: rgba(var(--color-slate-500-rgb), 0.05); }
         .grid-cell.occupied { border: 1px solid var(--color-border); background-color: var(--color-surface); cursor: pointer; }
-        .grid-cell.occupied:hover { border-color: var(--color-primary); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .grid-cell.occupied:hover { border-color: var(--color-primary); transform: scale(1.02); }
         .grid-cell.drag-over { border-color: var(--color-primary); background-color: var(--color-secondary); border-style: solid; }
-        .grid-cell.participated { background-color: rgba(var(--color-teal-500-rgb), 0.2); border-color: var(--color-success); }
+        .grid-cell.participated { background-color: rgba(var(--color-success-rgb), 0.2); border-color: var(--color-success); }
         .cell-student-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); text-align: center; }
-        .cell-student-number { font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: 2px; }
+        .cell-student-number { font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: var(--space-2); }
         .interaction-count { position: absolute; top: var(--space-4); right: var(--space-4); background-color: var(--color-primary); color: var(--color-btn-primary-text); border-radius: var(--radius-full); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); }
 
-        .grid-cell.highlight { animation: highlight-animation 3s ease-out; }
+        .grid-cell.highlight {
+            animation: highlight-animation 3s ease-out;
+        }
         @keyframes highlight-animation {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0.7); }
-            40% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(var(--color-teal-500-rgb), 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0); }
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0.7);
+            }
+            40% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(var(--color-teal-500-rgb), 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(var(--color-teal-500-rgb), 0);
+            }
         }
 
-        /* Painel de Controlo */
+        /* Control Panel */
         .control-actions { display: flex; flex-direction: column; gap: var(--space-12); margin-bottom: var(--space-24); }
-        .statistics { padding-top: var(--space-16); border-top: 1px solid var(--color-card-border); }
+        .statistics { padding-top: var(--space-16); border-top: 1px solid var(--color-card-border-inner); }
         .stats-grid { display: flex; flex-direction: column; gap: var(--space-12); }
         .stat-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-12); background-color: var(--color-background); border-radius: var(--radius-base); }
         .stat-label { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
@@ -241,58 +287,90 @@
         .modal__overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
         .modal__content { position: relative; background-color: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 90%; max-width: 500px; max-height: 80vh; display: flex; flex-direction: column; z-index: 1001; }
         .modal__content--large { max-width: 800px; }
-        .modal__header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-16) var(--space-24); border-bottom: 1px solid var(--color-card-border); }
+        .modal__header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-16) var(--space-20); border-bottom: 1px solid var(--color-card-border-inner); }
         .modal__close { background: none; border: none; font-size: var(--font-size-3xl); color: var(--color-text-secondary); cursor: pointer; line-height: 1; }
-        .modal__body { padding: var(--space-24); overflow-y: auto; }
-        .modal__footer { padding: var(--space-12) var(--space-24); border-top: 1px solid var(--color-card-border); display: flex; justify-content: flex-end; gap: var(--space-12); }
-        .confirm-modal__actions { display: flex; justify-content: flex-end; gap: var(--space-12); margin-top: var(--space-24); }
+        .modal__body { padding: var(--space-20); overflow-y: auto; }
+        .modal__footer { padding: var(--space-12) var(--space-20); border-top: 1px solid var(--color-card-border-inner); display: flex; justify-content: flex-end; gap: var(--space-12); }
 
-        /* Menu de Interação */
+        .confirm-modal__actions, .prompt-modal__actions { display: flex; justify-content: flex-end; gap: var(--space-12); margin-top: var(--space-24); }
+
+        /* Interaction Menu */
         .interaction-menu { position: fixed; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); z-index: 1000; min-width: 250px; display: none; }
         .interaction-menu.active { display: block; }
-        .interaction-menu__header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12) var(--space-16); border-bottom: 1px solid var(--color-card-border); }
-        .interaction-menu__close { background: none; border: none; font-size: var(--font-size-xl); color: var(--color-text-secondary); cursor: pointer; }
+        .interaction-menu__header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12) var(--space-16); border-bottom: 1px solid var(--color-card-border-inner); }
+        .interaction-menu__close { background: none; border: none; font-size: var(--font-size-xl); color: var(--color-text-secondary); cursor: pointer; line-height: 1;}
         .interaction-menu__body { padding: var(--space-8); }
         .interaction-btn { display: flex; align-items: center; gap: var(--space-12); width: 100%; padding: var(--space-12); background: none; border: none; border-radius: var(--radius-base); cursor: pointer; font-size: var(--font-size-base); text-align: left; }
         .interaction-btn:hover { background-color: var(--color-secondary); }
         .interaction-icon { font-size: var(--font-size-lg); }
 
-        /* Modal de Relatório */
+        /* Report Modal */
         .report-section { margin-bottom: var(--space-24); }
         .participation-list { display: flex; flex-direction: column; gap: var(--space-8); }
         .participation-item { display: flex; align-items: center; justify-content: space-between; padding: var(--space-12); background-color: var(--color-background); border-radius: var(--radius-base); border: 1px solid var(--color-border); }
-        .report-details { border: 1px solid var(--color-border); border-radius: var(--radius-base); margin-bottom: var(--space-8); }
-        .report-details[open] .report-summary { border-bottom: 1px solid var(--color-border); }
-        .report-summary { padding: var(--space-12); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: var(--font-weight-medium); list-style: none; }
-        .report-summary::-webkit-details-marker { display: none; }
-        .report-summary:hover { background-color: var(--color-secondary); }
-        .report-student-list { padding: var(--space-8) var(--space-12) var(--space-12) var(--space-24); margin: 0; list-style-type: none; }
-        .report-student-list li { padding: var(--space-4) 0; color: var(--color-text-secondary); }
-        .report-summary-label { display: flex; align-items: center; gap: var(--space-8); }
+        
+        .report-details {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-8);
+        }
+        .report-details[open] .report-summary {
+            border-bottom: 1px solid var(--color-border);
+        }
+        .report-summary {
+            padding: var(--space-12);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: var(--font-weight-medium);
+            list-style: none; /* Remove default marker */
+        }
+        .report-summary::-webkit-details-marker {
+            display: none; /* Hide for Chrome/Safari */
+        }
+        .report-summary:hover {
+            background-color: var(--color-secondary);
+        }
+        .report-student-list {
+            padding: var(--space-8) var(--space-12) var(--space-12) var(--space-24);
+            margin: 0;
+            list-style-type: none;
+        }
+        .report-student-list li {
+            padding: var(--space-4) 0;
+            color: var(--color-text-secondary);
+        }
+        .report-summary-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
 
-        /* Feedback Visual de Arrastar e Soltar */
+        /* Drag and Drop Visual Feedback */
         .dragging { opacity: 0.5; }
+        .students-list.drag-over, .grid-cell.drag-over {
+             background-color: var(--color-secondary);
+        }
         .empty-state { text-align: center; color: var(--color-text-secondary); padding: var(--space-24); }
 
-        /* Notificações Toast */
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
-        .toast { color: white; padding: 12px 16px; border-radius: var(--radius-base); box-shadow: var(--shadow-lg); max-width: 300px; animation: slideIn 0.3s ease-out; font-size: var(--font-size-sm); }
+        /* Toast Notifications */
+        .toast { position: fixed; top: 20px; right: 20px; color: white; padding: 12px 16px; border-radius: var(--radius-base); box-shadow: var(--shadow-lg); z-index: 2000; max-width: 300px; animation: slideIn 0.3s ease-out; font-size: var(--font-size-sm); }
         .toast--success { background-color: var(--color-success); }
         .toast--error { background-color: var(--color-error); }
         .toast--info { background-color: var(--color-info); }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
-        /* Responsividade */
+        /* Responsive */
         @media (max-width: 1024px) {
-            .layout-container { grid-template-columns: 1fr; grid-template-rows: auto; }
-            .students-panel, .control-panel { max-height: none; }
+            .layout-container { grid-template-columns: 1fr; grid-template-rows: auto auto auto; height: auto; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Cabeçalho -->
+        <!-- Header -->
         <header class="header">
             <div class="container">
                 <h1 class="header__title">Grelha Ativa</h1>
@@ -302,35 +380,43 @@
             </div>
         </header>
 
-        <!-- Conteúdo Principal -->
+        <!-- Main Content -->
         <main class="main-content">
             <div class="container">
                 <div class="layout-container">
-                    <!-- Painel da Lista de Alunos -->
+                    <!-- Students List Panel -->
                     <aside class="students-panel card">
                         <div class="panel-header">
                             <h3>Lista de Alunos</h3>
-                            <div style="display: flex; gap: 8px;">
+                            <div class="panel-header-actions" style="display: flex; gap: 8px;">
                                 <button class="btn btn--secondary btn--sm" id="import-csv-btn">Importar CSV</button>
-                                <button class="btn btn--primary btn--sm" id="add-student-btn-modal">Adicionar</button>
+                                <button class="btn btn--primary btn--sm" id="add-student-btn">Adicionar</button>
                             </div>
                         </div>
-                        <div class="students-list" id="students-list"></div>
-                        <div class="panel-actions">
-                            <button class="btn btn--secondary btn--sm btn--full-width" id="save-layout-btn">Guardar Layout</button>
+                        <div class="students-list" id="students-list">
+                            <!-- Students will be dynamically added here -->
                         </div>
                     </aside>
 
-                    <!-- Grelha da Sala de Aula -->
+                    <!-- Classroom Grid -->
                     <div class="classroom-section">
                         <div class="section-header">
                             <h3>Layout da Sala</h3>
-                            <div id="class-status"></div>
+                            <div class="class-status" id="class-status">
+                                <span class="status status--info">Configuração</span>
+                            </div>
                         </div>
-                        <div class="classroom-grid" id="classroom-grid"></div>
+                        <div class="layout-controls">
+                            <select id="layout-select" class="form-control"></select>
+                            <button id="save-layout-btn" class="btn btn--secondary btn--sm">Guardar Layout...</button>
+                            <button id="manage-layouts-btn" class="btn btn--outline btn--sm">Gerir...</button>
+                        </div>
+                        <div class="classroom-grid" id="classroom-grid">
+                            <!-- Grid cells will be dynamically generated -->
+                        </div>
                     </div>
 
-                    <!-- Painel de Controlo -->
+                    <!-- Control Panel -->
                     <aside class="control-panel card">
                         <div class="panel-header">
                             <h3>Painel de Controlo</h3>
@@ -359,14 +445,11 @@
             </div>
         </main>
     </div>
+    
+    <!-- Hidden file input for CSV import -->
+    <input type="file" id="csv-file-input" style="display: none;" accept=".csv,text/csv">
 
-    <!-- Input de ficheiro oculto para importação de CSV -->
-    <input type="file" id="csv-file-input" style="display: none;" accept=".csv">
-
-    <!-- Container para as notificações Toast -->
-    <div class="toast-container" id="toast-container"></div>
-
-    <!-- Modais -->
+    <!-- Add Student Modal -->
     <div class="modal" id="add-student-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content">
@@ -378,11 +461,11 @@
                 <form id="add-student-form">
                     <div class="form-group">
                         <label class="form-label" for="add-student-name">Nome do Aluno</label>
-                        <input type="text" class="form-control" id="add-student-name" required>
+                        <input type="text" class="form-control" id="add-student-name" name="add-student-name" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="add-student-number">Número do Aluno</label>
-                        <input type="text" class="form-control" id="add-student-number" required>
+                        <input type="text" class="form-control" id="add-student-number" name="add-student-number" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn--primary btn--full-width">Adicionar</button>
@@ -391,7 +474,8 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- Edit Student Modal -->
     <div class="modal" id="edit-student-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content">
@@ -401,14 +485,14 @@
             </div>
             <div class="modal__body">
                 <form id="edit-student-form">
-                    <input type="hidden" id="edit-student-id">
+                    <input type="hidden" id="edit-student-id" name="edit-student-id">
                     <div class="form-group">
                         <label class="form-label" for="edit-student-name">Nome do Aluno</label>
-                        <input type="text" class="form-control" id="edit-student-name" required>
+                        <input type="text" class="form-control" id="edit-student-name" name="edit-student-name" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="edit-student-number">Número do Aluno</label>
-                        <input type="text" class="form-control" id="edit-student-number" required>
+                        <input type="text" class="form-control" id="edit-student-number" name="edit-student-number" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn--primary btn--full-width">Guardar Alterações</button>
@@ -418,14 +502,34 @@
         </div>
     </div>
 
+
+    <!-- Interaction Menu -->
     <div class="interaction-menu" id="interaction-menu">
         <div class="interaction-menu__header">
-            <h4 id="interaction-student-name"></h4>
-            <button class="interaction-menu__close">&times;</button>
+            <h4 id="interaction-student-name">Aluno</h4>
+            <button class="interaction-menu__close" id="interaction-close">&times;</button>
         </div>
-        <div class="interaction-menu__body"></div>
+        <div class="interaction-menu__body">
+            <button class="interaction-btn" data-type="question">
+                <span class="interaction-icon">❓</span>
+                <span>Fez uma pergunta</span>
+            </button>
+            <button class="interaction-btn" data-type="correct_answer">
+                <span class="interaction-icon">✅</span>
+                <span>Deu resposta correcta</span>
+            </button>
+            <button class="interaction-btn" data-type="difficulty">
+                <span class="interaction-icon">🤔</span>
+                <span>Mostrou dificuldade</span>
+            </button>
+            <button class="interaction-btn" data-type="helped_colleague">
+                <span class="interaction-icon">🤝</span>
+                <span>Ajudou um colega</span>
+            </button>
+        </div>
     </div>
 
+    <!-- Report Modal -->
     <div class="modal" id="report-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content modal__content--large">
@@ -435,12 +539,16 @@
             </div>
             <div class="modal__body">
                 <div class="report-section">
-                    <h4>Alunos Menos Participativos</h4>
-                    <div id="low-participation-list" class="participation-list"></div>
+                    <h4>Alunos Sem Participação</h4>
+                    <div id="low-participation-list" class="participation-list">
+                        <!-- Will be populated dynamically -->
+                    </div>
                 </div>
                 <div class="report-section">
                     <h4>Detalhe das Interações</h4>
-                    <div id="interaction-details-container"></div>
+                    <div id="interaction-details-container">
+                        <!-- Will be populated dynamically -->
+                    </div>
                 </div>
             </div>
             <div class="modal__footer">
@@ -449,6 +557,7 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
     <div class="modal" id="confirm-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content">
@@ -457,7 +566,7 @@
                 <button class="modal__close">&times;</button>
             </div>
             <div class="modal__body">
-                <p id="confirm-modal-text"></p>
+                <p id="confirm-modal-text">Tem a certeza?</p>
                 <div class="confirm-modal__actions">
                     <button class="btn btn--outline" id="confirm-cancel-btn">Cancelar</button>
                     <button class="btn btn--primary" id="confirm-ok-btn">Confirmar</button>
@@ -466,6 +575,30 @@
         </div>
     </div>
 
+    <!-- Prompt Modal -->
+    <div class="modal" id="prompt-modal">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="prompt-modal-title">Input Required</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <p id="prompt-modal-text">Please enter a value:</p>
+                <form id="prompt-form">
+                    <div class="form-group">
+                        <input type="text" id="prompt-input" class="form-control" required>
+                    </div>
+                    <div class="prompt-modal__actions">
+                        <button type="button" class="btn btn--outline" id="prompt-cancel-btn">Cancelar</button>
+                        <button type="submit" class="btn btn--primary" id="prompt-ok-btn">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Class Management Modal -->
     <div class="modal" id="manage-classes-modal">
         <div class="modal__overlay"></div>
         <div class="modal__content">
@@ -479,54 +612,67 @@
                     <select id="class-select-dropdown" class="form-control"></select>
                 </div>
                 <hr style="margin: var(--space-24) 0;">
-                <form id="create-class-form" class="form-group">
+                <div class="form-group">
                     <label for="new-class-name" class="form-label">Criar Nova Turma</label>
-                    <input type="text" id="new-class-name" class="form-control" placeholder="Nome da nova turma" required>
-                    <button type="submit" class="btn btn--primary btn--full-width" style="margin-top: var(--space-8);">Criar</button>
-                </form>
-                <hr style="margin: var(--space-24) 0;">
-                <form id="rename-class-form" class="form-group">
+                    <input type="text" id="new-class-name" class="form-control" placeholder="Nome da nova turma">
+                    <button class="btn btn--primary btn--full-width" id="create-class-btn" style="margin-top: var(--space-8);">Criar</button>
+                </div>
+                 <hr style="margin: var(--space-24) 0;">
+                <div class="form-group">
                     <label for="rename-class-name" class="form-label">Renomear Turma Ativa</label>
-                    <input type="text" id="rename-class-name" class="form-control" placeholder="Novo nome para a turma" required>
-                    <button type="submit" class="btn btn--secondary btn--full-width" style="margin-top: var(--space-8);">Renomear</button>
-                </form>
+                    <input type="text" id="rename-class-name" class="form-control" placeholder="Novo nome para a turma">
+                    <button class="btn btn--secondary btn--full-width" id="rename-class-btn" style="margin-top: var(--space-8);">Renomear</button>
+                </div>
                 <hr style="margin: var(--space-24) 0;">
                 <div class="form-group">
-                    <label class="form-label">Apagar Turma Ativa</label>
+                     <label class="form-label">Apagar Turma Ativa</label>
                     <button class="btn btn--danger btn--full-width" id="delete-class-btn">Apagar Turma</button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Manage Layouts Modal -->
+    <div class="modal" id="manage-layouts-modal">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Gerir Layouts</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body" id="manage-layouts-list">
+                <!-- Layout list will be populated here -->
+            </div>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- CONSTANTES E ESTADO DA APLICAÇÃO ---
-            const GRID_SIZE = 36;
-            const APP_STATE_KEY = 'grelhaAtivaMultiClassState';
+            // --- STATE MANAGEMENT ---
+            const initialClassState = {
+                students: [],
+                layouts: { 'Layout Padrão': {} },
+                activeLayoutName: 'Layout Padrão',
+                interactions: {}, // { studentId: { interactionType: count } }
+                isClassActive: false,
+                nextStudentId: 1
+            };
 
-            const INTERACTION_TYPES = {
+            let appState = {
+                classes: {}, // { classId: classObject }
+                activeClassId: null,
+                nextClassId: 1
+            };
+
+            const interactionTypes = {
                 "question": { label: "Fez uma pergunta", icon: "❓" },
                 "correct_answer": { label: "Deu resposta correcta", icon: "✅" },
                 "difficulty": { label: "Mostrou dificuldade", icon: "🤔" },
                 "helped_colleague": { label: "Ajudou um colega", icon: "🤝" }
             };
 
-            const initialClassState = () => ({
-                students: [],
-                classroomLayout: {},
-                interactions: {},
-                isClassActive: false,
-                nextStudentId: 1
-            });
-
-            let appState = {
-                classes: {},
-                activeClassId: null,
-                nextClassId: 1
-            };
-
-            // --- ELEMENTOS DO DOM ---
+            // --- DOM ELEMENTS ---
             const DOMElements = {
                 activeClassName: document.getElementById('active-class-name'),
                 studentsList: document.getElementById('students-list'),
@@ -537,469 +683,118 @@
                 showReportBtn: document.getElementById('show-report-btn'),
                 totalInteractions: document.getElementById('total-interactions'),
                 participatingStudents: document.getElementById('participating-students'),
+                addStudentBtn: document.getElementById('add-student-btn'),
                 addStudentForm: document.getElementById('add-student-form'),
                 editStudentForm: document.getElementById('edit-student-form'),
                 interactionMenu: document.getElementById('interaction-menu'),
-                interactionMenuBody: document.querySelector('#interaction-menu .interaction-menu__body'),
+                // Modals
                 confirmModal: document.getElementById('confirm-modal'),
                 confirmModalText: document.getElementById('confirm-modal-text'),
                 confirmOkBtn: document.getElementById('confirm-ok-btn'),
+                promptModal: document.getElementById('prompt-modal'),
+                promptForm: document.getElementById('prompt-form'),
+                promptInput: document.getElementById('prompt-input'),
+                promptTitle: document.getElementById('prompt-modal-title'),
+                promptText: document.getElementById('prompt-modal-text'),
+                promptOkBtn: document.getElementById('prompt-ok-btn'),
+                promptCancelBtn: document.getElementById('prompt-cancel-btn'),
                 manageClassesModal: document.getElementById('manage-classes-modal'),
+                manageLayoutsModal: document.getElementById('manage-layouts-modal'),
+                // Class Management
                 classSelectDropdown: document.getElementById('class-select-dropdown'),
-                createClassForm: document.getElementById('create-class-form'),
-                renameClassForm: document.getElementById('rename-class-form'),
+                createClassBtn: document.getElementById('create-class-btn'),
+                renameClassBtn: document.getElementById('rename-class-btn'),
                 deleteClassBtn: document.getElementById('delete-class-btn'),
+                // Layout Management
+                layoutSelect: document.getElementById('layout-select'),
+                saveLayoutBtn: document.getElementById('save-layout-btn'),
+                manageLayoutsBtn: document.getElementById('manage-layouts-btn'),
+                manageLayoutsList: document.getElementById('manage-layouts-list'),
+                // Misc
                 csvFileInput: document.getElementById('csv-file-input'),
                 importCsvBtn: document.getElementById('import-csv-btn'),
                 randomStudentBtn: document.getElementById('random-student-btn'),
-                toastContainer: document.getElementById('toast-container'),
             };
 
-            // --- FUNÇÕES DE LÓGICA DE NEGÓCIO ---
-
-            const getActiveClass = () => appState.classes[appState.activeClassId] || null;
-
-            const saveState = () => {
-                try {
-                    localStorage.setItem(APP_STATE_KEY, JSON.stringify(appState));
-                } catch (e) {
-                    console.error("Falha ao guardar o estado no localStorage", e);
-                    showToast("Não foi possível guardar o estado.", "error");
-                }
-            };
-
-            const loadState = () => {
-                try {
-                    const savedStateJSON = localStorage.getItem(APP_STATE_KEY);
-                    if (savedStateJSON) {
-                        const savedState = JSON.parse(savedStateJSON);
-                        
-                        // Garante que as propriedades de nível superior existem
-                        appState.nextClassId = savedState.nextClassId || 1;
-                        appState.activeClassId = savedState.activeClassId || null;
-                        appState.classes = savedState.classes || {};
-
-                        // Valida cada objeto de turma para garantir que tem todas as propriedades necessárias
-                        for (const classId in appState.classes) {
-                            if (Object.prototype.hasOwnProperty.call(appState.classes, classId)) {
-                                // Funde com os padrões. Os dados guardados sobrepõem-se aos padrões.
-                                appState.classes[classId] = {
-                                    ...initialClassState(), // Fornece todas as chaves padrão
-                                    ...appState.classes[classId] // Sobrepõe com os valores guardados
-                                };
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.error("Falha ao carregar ou validar o estado do localStorage", e);
-                    // Reinicia para um estado seguro conhecido se a análise/validação falhar
-                    appState = { classes: {}, activeClassId: null, nextClassId: 1 };
-                }
-            };
-
-            const createNewClass = (name, shouldSave = true) => {
-                const newClassId = `class_${appState.nextClassId++}`;
-                appState.classes[newClassId] = {
-                    id: newClassId,
-                    name: name,
-                    ...initialClassState()
-                };
-                appState.activeClassId = newClassId;
-                if (shouldSave) {
-                    saveState();
-                    showToast(`Turma "${name}" criada com sucesso.`, 'success');
-                }
-            };
-
-            const addStudent = (name, number) => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-
-                if (activeClass.students.some(s => s.number === number)) {
-                    showToast('Já existe um aluno com este número nesta turma.', 'error');
-                    return false;
-                }
-                const newStudent = { id: activeClass.nextStudentId++, name, number };
-                activeClass.students.push(newStudent);
-                saveState();
-                showToast(`Aluno ${name} adicionado com sucesso.`, 'success');
-                return true;
-            };
-
-            const updateStudent = (id, name, number) => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-
-                if (activeClass.students.some(s => s.number === number && s.id !== id)) {
-                    showToast('Já existe outro aluno com este número nesta turma.', 'error');
-                    return false;
-                }
-
-                const studentToUpdate = activeClass.students.find(s => s.id === id);
-                if (studentToUpdate) {
-                    studentToUpdate.name = name;
-                    studentToUpdate.number = number;
-                }
-
-                Object.values(activeClass.classroomLayout).forEach(studentInCell => {
-                    if (studentInCell?.id === id) {
-                        studentInCell.name = name;
-                        studentInCell.number = number;
-                    }
-                });
-
-                saveState();
-                showToast(`Aluno ${name} atualizado com sucesso.`, 'success');
-                return true;
-            };
-
-            const removeStudent = (studentId) => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-
-                const student = activeClass.students.find(s => s.id === studentId);
-                if (!student) return;
-
-                activeClass.students = activeClass.students.filter(s => s.id !== studentId);
-                Object.keys(activeClass.classroomLayout).forEach(key => {
-                    if (activeClass.classroomLayout[key]?.id === studentId) {
-                        delete activeClass.classroomLayout[key];
-                    }
-                });
-                delete activeClass.interactions[studentId];
-
-                saveState();
-                showToast(`Aluno ${student.name} removido com sucesso.`, 'success');
-                renderAll();
-            };
-
-            const processCSV = (csvText) => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-
-                const lines = csvText.split(/\r\n|\n/);
-                let importedCount = 0;
-                let skippedCount = 0;
-
-                lines.slice(1).forEach(line => {
-                    line = line.trim();
-                    if (line === '') return;
-
-                    const parts = line.split(/[,;]/);
-                    if (parts.length < 2) {
-                        skippedCount++;
-                        return;
-                    }
-
-                    const name = parts[0].trim();
-                    const number = parts[1].trim();
-
-                    if (!name || !number || activeClass.students.some(s => s.number === number)) {
-                        skippedCount++;
-                        return;
-                    }
-
-                    const newStudent = { id: activeClass.nextStudentId++, name, number };
-                    activeClass.students.push(newStudent);
-                    importedCount++;
-                });
-
-                if (importedCount > 0) {
-                    saveState();
-                    renderAll();
-                    showToast(`${importedCount} aluno(s) importado(s) com sucesso.`, 'success');
-                }
-                if (skippedCount > 0) {
-                    showToast(`${skippedCount} aluno(s) ignorado(s) (duplicados ou formato inválido).`, 'info');
-                }
-                if (importedCount === 0 && skippedCount === 0) {
-                    showToast('Não foram encontrados alunos para importar no ficheiro.', 'warning');
-                }
-            };
-
-            // --- FUNÇÕES DE RENDERIZAÇÃO E UI ---
-
-            const renderAll = () => {
-                const activeClass = getActiveClass();
-                if (!activeClass) {
-                    // Lida com o estado em que nenhuma turma está ativa (p.e., após apagar a última)
-                    document.querySelector('.layout-container').style.display = 'none';
-                    updateHeader();
-                    return;
-                }
-                document.querySelector('.layout-container').style.display = 'grid';
-                renderStudentsList();
-                renderClassroomGrid();
-                updateStatistics();
-                updateClassStatusUI();
-                updateHeader();
-                setupDragAndDrop();
-            };
-
-            const updateHeader = () => {
-                DOMElements.activeClassName.textContent = getActiveClass()?.name || "Nenhuma turma selecionada";
-            };
-
-            const renderStudentsList = () => {
-                const activeClass = getActiveClass();
-                if (!activeClass) {
-                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhuma turma selecionada.</p></div>`;
-                    return;
-                }
-                // CORREÇÃO: Adicionado `|| {}` para evitar erro se classroomLayout não existir.
-                const studentsInGridIds = new Set(Object.values(activeClass.classroomLayout || {}).filter(Boolean).map(s => s.id));
-                const availableStudents = activeClass.students.filter(student => !studentsInGridIds.has(student.id));
-
-                if (activeClass.students.length === 0) {
-                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhum aluno. Adicione alunos ou importe um CSV.</p></div>`;
-                } else if (availableStudents.length === 0) {
-                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão na grelha.</p></div>`;
-                } else {
-                    DOMElements.studentsList.innerHTML = availableStudents.map(student => `
-                        <div class="student-item" draggable="true" data-student-id="${student.id}">
-                            <div>
-                                <div class="student-name">${student.name}</div>
-                                <div class="student-number">Nº ${student.number}</div>
-                            </div>
-                            <div class="student-actions">
-                                <button class="student-action-btn edit" data-student-id="${student.id}" title="Editar aluno">✏️</button>
-                                <button class="student-action-btn remove" data-student-id="${student.id}" title="Remover aluno">&times;</button>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            };
-
-            const renderClassroomGrid = () => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const gridHtml = Array.from({ length: GRID_SIZE }, (_, i) => {
-                    const student = activeClass.classroomLayout[i];
-                    const interactionCount = student ? Object.values(activeClass.interactions[student.id] || {}).reduce((a, b) => a + b, 0) : 0;
-                    
-                    if (student) {
-                        return `
-                            <div class="grid-cell occupied ${interactionCount > 0 ? 'participated' : ''}" data-cell-index="${i}" data-student-id="${student.id}">
-                                <div class="cell-student-name">${student.name}</div>
-                                <div class="cell-student-number">Nº ${student.number}</div>
-                                ${interactionCount > 0 ? `<div class="interaction-count">${interactionCount}</div>` : ''}
-                            </div>`;
-                    } else {
-                        return `<div class="grid-cell empty" data-cell-index="${i}"></div>`;
-                    }
-                }).join('');
-                DOMElements.classroomGrid.innerHTML = gridHtml;
-            };
-
-            const updateStatistics = () => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const totalInteractions = Object.values(activeClass.interactions)
-                    .flatMap(Object.values)
-                    .reduce((sum, count) => sum + count, 0);
-                
-                const participatingStudentsCount = Object.keys(activeClass.interactions).filter(id =>
-                    Object.values(activeClass.interactions[id]).reduce((a, b) => a + b, 0) > 0
-                ).length;
-
-                DOMElements.totalInteractions.textContent = totalInteractions;
-                DOMElements.participatingStudents.textContent = participatingStudentsCount;
-            };
-
-            const updateClassStatusUI = () => {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const isActive = activeClass.isClassActive;
-
-                DOMElements.toggleClassBtn.textContent = isActive ? 'Terminar Aula' : 'Iniciar Aula';
-                DOMElements.toggleClassBtn.classList.toggle('btn--primary', !isActive);
-                DOMElements.toggleClassBtn.classList.toggle('btn--outline', isActive);
-
-                DOMElements.classStatus.innerHTML = isActive
-                    ? '<span class="status status--success">Aula Ativa</span>'
-                    : '<span class="status status--info">Configuração</span>';
-                
-                DOMElements.statistics.style.display = isActive ? 'block' : 'none';
-                DOMElements.showReportBtn.style.display = isActive ? 'block' : 'none';
-            };
-
-            const showToast = (message, type = 'info') => {
-                const toast = document.createElement('div');
-                toast.className = `toast toast--${type}`;
-                toast.textContent = message;
-                DOMElements.toastContainer.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.animation = 'slideOut 0.3s ease-in forwards';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            };
-
-            const showModal = (modalId) => {
-                closeAllModals();
-                const modal = document.getElementById(modalId);
-                if (modal) {
-                    modal.classList.add('active');
-                    if (modalId === 'report-modal') generateReport();
-                }
-            };
-
-            const closeAllModals = () => {
-                document.querySelectorAll('.modal.active').forEach(modal => modal.classList.remove('active'));
-            };
-            
-            const showConfirmation = (message, onConfirm) => {
-                DOMElements.confirmModalText.textContent = message;
-                // Clone and replace the button to remove old event listeners
-                const newOkBtn = DOMElements.confirmOkBtn.cloneNode(true);
-                DOMElements.confirmOkBtn.parentNode.replaceChild(newOkBtn, DOMElements.confirmOkBtn);
-                DOMElements.confirmOkBtn = newOkBtn;
-
-                DOMElements.confirmOkBtn.addEventListener('click', () => {
-                    closeAllModals();
-                    onConfirm();
-                }, { once: true }); // Ensure the listener only fires once
-                showModal('confirm-modal');
-            };
-
-            // --- GESTORES DE EVENTOS (HANDLERS) ---
-            
-            function handleStudentAction(e) {
-                const button = e.target.closest('.student-action-btn');
-                if (!button) return;
-                
-                const studentId = parseInt(button.dataset.studentId);
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const student = activeClass.students.find(s => s.id === studentId);
-
-                if (button.classList.contains('remove')) {
-                    if (student) {
-                        showConfirmation(`Tem a certeza que deseja remover o aluno ${student.name}?`, () => removeStudent(studentId));
-                    }
-                } else if (button.classList.contains('edit')) {
-                    if (student) {
-                        document.getElementById('edit-student-id').value = student.id;
-                        document.getElementById('edit-student-name').value = student.name;
-                        document.getElementById('edit-student-number').value = student.number;
-                        showModal('edit-student-modal');
-                    }
-                }
-            }
-
-            function handleAddStudentSubmit(e) {
-                e.preventDefault();
-                const name = document.getElementById('add-student-name').value.trim();
-                const number = document.getElementById('add-student-number').value.trim();
-                if (name && number && addStudent(name, number)) {
-                    e.target.reset();
-                    closeAllModals();
-                    renderAll();
-                }
-            }
-
-            function handleEditStudentSubmit(e) {
-                e.preventDefault();
-                const id = parseInt(document.getElementById('edit-student-id').value);
-                const name = document.getElementById('edit-student-name').value.trim();
-                const number = document.getElementById('edit-student-number').value.trim();
-                if (name && number && updateStudent(id, name, number)) {
-                    closeAllModals();
-                    renderAll();
-                }
-            }
-            
-            function handleFileUpload(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => processCSV(e.target.result);
-                reader.readAsText(file);
-                event.target.value = ''; // Reset input
-            }
-
-            function handleDrop(e) {
-                e.preventDefault();
-                const activeClass = getActiveClass();
-                if (!activeClass || activeClass.isClassActive) return;
-                e.currentTarget.classList.remove('drag-over');
-
-                const studentId = parseInt(e.dataTransfer.getData('text/plain'));
-                const targetCellIndex = parseInt(e.currentTarget.dataset.cellIndex);
-                const originCellIndex = e.dataTransfer.getData('origin-cell');
-                const student = activeClass.students.find(s => s.id === studentId);
-                
-                if (!student) return;
-
-                const studentInTargetCell = activeClass.classroomLayout[targetCellIndex];
-
-                if (originCellIndex) delete activeClass.classroomLayout[originCellIndex];
-                
-                activeClass.classroomLayout[targetCellIndex] = student;
-
-                if (studentInTargetCell && originCellIndex) {
-                    activeClass.classroomLayout[originCellIndex] = studentInTargetCell;
-                }
-
-                saveState();
-                renderAll();
-            }
-
-            function handleCellClick(e) {
-                const cell = e.target.closest('.grid-cell.occupied');
-                if (!cell) return;
-
-                const activeClass = getActiveClass();
-                if (!activeClass || !activeClass.isClassActive) return;
-                
-                const studentId = parseInt(cell.dataset.studentId);
-                const student = activeClass.students.find(s => s.id === studentId);
-                if (student) showInteractionMenu(cell, student);
-            }
-
-            function handleCellDoubleClick(e) {
-                const cell = e.target.closest('.grid-cell.occupied');
-                if (!cell) return;
-
-                const activeClass = getActiveClass();
-                if (!activeClass || activeClass.isClassActive) return;
-
-                const cellIndex = parseInt(cell.dataset.cellIndex);
-                const student = activeClass.classroomLayout[cellIndex];
-                if (student) {
-                    delete activeClass.classroomLayout[cellIndex];
-                    showToast(`${student.name} removido da grelha.`, 'info');
-                    saveState();
-                    renderAll();
-                }
-            }
-            
-            // --- INICIALIZAÇÃO ---
+            // --- INITIALIZATION ---
             function initApp() {
                 loadState();
                 if (Object.keys(appState.classes).length === 0) {
                     createNewClass("Minha Primeira Turma", false); // Don't save yet
-                    saveState(); // Save after creation
                 }
                 if (!appState.activeClassId || !appState.classes[appState.activeClassId]) {
                     appState.activeClassId = Object.keys(appState.classes)[0] || null;
                 }
-                
+                saveState();
                 setupEventListeners();
                 renderAll();
-                populateInteractionMenu();
             }
 
+            function renderAll() {
+                if (!appState.activeClassId || !appState.classes[appState.activeClassId]) {
+                    console.warn("No active class to render.");
+                    // TODO: Render an empty state for the whole app
+                    return;
+                };
+                renderStudentsList();
+                renderLayoutControls();
+                renderClassroomGrid();
+                updateStatistics();
+                updateClassStatusUI();
+                updateHeader();
+            }
+
+            // --- STATE PERSISTENCE (localStorage) ---
+            function saveState() {
+                try {
+                    localStorage.setItem('grelhaAtivaMultiClassState', JSON.stringify(appState));
+                } catch (e) {
+                    console.error("Failed to save state to localStorage", e);
+                    showToast("Não foi possível guardar o estado.", "error");
+                }
+            }
+
+            function loadState() {
+                try {
+                    const savedState = localStorage.getItem('grelhaAtivaMultiClassState');
+                    if (savedState) {
+                        appState = JSON.parse(savedState);
+                        // --- Data Migration & Robustness ---
+                        appState.nextClassId = (Math.max(0, ...Object.keys(appState.classes).map(id => parseInt(id.split('_')[1] || 0))) || 0) + 1;
+                        Object.values(appState.classes).forEach(c => {
+                            // Migrate old single layout to new multi-layout structure
+                            if (c.classroomLayout && !c.layouts) {
+                                c.layouts = { 'Layout Padrão': c.classroomLayout };
+                                delete c.classroomLayout;
+                            }
+                            if (!c.layouts) {
+                                c.layouts = { 'Layout Padrão': {} };
+                            }
+                            if (!c.activeLayoutName || !c.layouts[c.activeLayoutName]) {
+                                c.activeLayoutName = Object.keys(c.layouts)[0] || 'Layout Padrão';
+                            }
+                            c.nextStudentId = (Math.max(0, ...c.students.map(s => s.id)) || 0) + 1;
+                        });
+                    }
+                } catch (e) {
+                    console.error("Failed to load or parse state from localStorage", e);
+                    appState = { classes: {}, activeClassId: null, nextClassId: 1 }; // Reset to a safe default
+                }
+            }
+
+            // --- EVENT LISTENERS ---
             function setupEventListeners() {
                 DOMElements.activeClassName.addEventListener('click', () => {
                     populateClassManagementModal();
                     showModal('manage-classes-modal');
                 });
                 
-                DOMElements.addStudentForm.addEventListener('submit', handleAddStudentSubmit);
-                DOMElements.editStudentForm.addEventListener('submit', handleEditStudentSubmit);
-                DOMElements.studentsList.addEventListener('click', handleStudentAction);
-                DOMElements.classroomGrid.addEventListener('click', handleCellClick);
-                DOMElements.classroomGrid.addEventListener('dblclick', handleCellDoubleClick);
+                DOMElements.addStudentBtn.addEventListener('click', () => {
+                    DOMElements.addStudentForm.reset();
+                    showModal('add-student-modal');
+                });
+                DOMElements.addStudentForm.addEventListener('submit', handleAddStudent);
+                DOMElements.editStudentForm.addEventListener('submit', handleEditStudent);
                 
                 DOMElements.importCsvBtn.addEventListener('click', () => DOMElements.csvFileInput.click());
                 DOMElements.csvFileInput.addEventListener('change', handleFileUpload);
@@ -1007,27 +802,32 @@
                 DOMElements.toggleClassBtn.addEventListener('click', toggleClass);
                 DOMElements.randomStudentBtn.addEventListener('click', handleRandomStudentSelection);
                 document.getElementById('clear-data-btn').addEventListener('click', () => {
-                    showConfirmation('Tem a certeza que deseja limpar os dados de interação desta turma?', clearClassData);
+                    showConfirmation('Tem a certeza que deseja limpar os dados de interação desta turma? Esta ação não pode ser desfeita.', clearClassData);
                 });
                 DOMElements.showReportBtn.addEventListener('click', () => showModal('report-modal'));
-                document.getElementById('save-layout-btn').addEventListener('click', () => {
-                    saveState();
-                    showToast('Layout guardado com sucesso!', 'success');
-                });
                 document.getElementById('export-report-btn').addEventListener('click', exportReportToCSV);
 
+                // Modals
                 document.querySelectorAll('.modal__close, .modal__overlay').forEach(el => el.addEventListener('click', closeAllModals));
+                document.querySelectorAll('.modal__content').forEach(el => el.addEventListener('click', e => e.stopPropagation()));
                 document.getElementById('confirm-cancel-btn').addEventListener('click', closeAllModals);
+                DOMElements.promptCancelBtn.addEventListener('click', closeAllModals);
 
-                document.querySelector('#interaction-menu .interaction-menu__close').addEventListener('click', closeInteractionMenu);
-                DOMElements.interactionMenuBody.addEventListener('click', handleInteraction);
+                // Interaction Menu
+                document.getElementById('interaction-close').addEventListener('click', closeInteractionMenu);
+                document.querySelectorAll('.interaction-btn').forEach(btn => btn.addEventListener('click', handleInteraction));
 
-                // Class Management Listeners
-                DOMElements.createClassForm.addEventListener('submit', handleCreateClass);
+                // Class Management
+                DOMElements.createClassBtn.addEventListener('click', handleCreateClass);
                 DOMElements.classSelectDropdown.addEventListener('change', handleSelectClass);
-                DOMElements.renameClassForm.addEventListener('submit', handleRenameClass);
+                DOMElements.renameClassBtn.addEventListener('click', handleRenameClass);
                 DOMElements.deleteClassBtn.addEventListener('click', handleDeleteClass);
-                document.getElementById('add-student-btn-modal').addEventListener('click', () => showModal('add-student-modal'));
+
+                // Layout Management
+                DOMElements.layoutSelect.addEventListener('change', handleSelectLayout);
+                DOMElements.saveLayoutBtn.addEventListener('click', handleSaveLayout);
+                DOMElements.manageLayoutsBtn.addEventListener('click', handleManageLayouts);
+
 
                 document.addEventListener('keydown', e => {
                     if (e.key === 'Escape') {
@@ -1037,28 +837,279 @@
                 });
             }
             
-            initApp(); // Iniciar a aplicação
+             // --- CSV IMPORT ---
+            function handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
 
-            // O resto das funções (handlers, etc.) são definidas abaixo
-            // para manter a clareza.
-            
-            function populateInteractionMenu() {
-                DOMElements.interactionMenuBody.innerHTML = Object.entries(INTERACTION_TYPES).map(([type, {label, icon}]) => `
-                    <button class="interaction-btn" data-type="${type}">
-                        <span class="interaction-icon">${icon}</span>
-                        <span>${label}</span>
-                    </button>
-                `).join('');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    processCSV(text);
+                };
+                reader.onerror = function() {
+                    showToast("Erro ao ler o ficheiro.", "error");
+                }
+                reader.readAsText(file);
+                event.target.value = '';
             }
 
-            function setupDragAndDrop() {
+            function processCSV(csvText) {
                 const activeClass = getActiveClass();
-                const isClassActive = activeClass?.isClassActive;
+                if (!activeClass) return;
 
+                const lines = csvText.split(/\r\n|\n/);
+                let importedCount = 0;
+                let skippedCount = 0;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line === '') continue;
+
+                    const parts = line.split(/[,;]/).map(p => p.trim().replace(/^"|"$/g, ''));
+                    if (parts.length < 2) { skippedCount++; continue; }
+
+                    const name = parts[0];
+                    const number = parts[1];
+
+                    if (!name || !number) { skippedCount++; continue; }
+                    if (activeClass.students.some(s => s.number === number)) { skippedCount++; continue; }
+
+                    const newStudent = { id: activeClass.nextStudentId++, name, number };
+                    activeClass.students.push(newStudent);
+                    importedCount++;
+                }
+
+                if (importedCount > 0) {
+                    saveState();
+                    renderAll();
+                    showToast(`${importedCount} aluno(s) importado(s) com sucesso.`, 'success');
+                }
+                if (skippedCount > 0) {
+                    showToast(`${skippedCount} aluno(s) ignorado(s) (duplicados ou formato inválido).`, 'info');
+                }
+                if (importedCount === 0 && skippedCount === 0 && lines.length <=1) {
+                    showToast('Não foram encontrados alunos para importar no ficheiro.', 'warning');
+                }
+            }
+
+
+            // --- CLASS & LAYOUT MANAGEMENT ---
+            function getActiveClass() { return appState.classes[appState.activeClassId]; }
+            function getActiveLayout() {
+                const activeClass = getActiveClass();
+                if (!activeClass || !activeClass.layouts) return {};
+                return activeClass.layouts[activeClass.activeLayoutName] || {};
+            }
+
+            function createNewClass(name, shouldSave = true) {
+                const newClassId = `class_${appState.nextClassId++}`;
+                appState.classes[newClassId] = JSON.parse(JSON.stringify(initialClassState));
+                appState.classes[newClassId].id = newClassId;
+                appState.classes[newClassId].name = name;
+                appState.activeClassId = newClassId;
+                if (shouldSave) {
+                    saveState();
+                    showToast(`Turma "${name}" criada com sucesso.`, 'success');
+                }
+            }
+            
+            function handleCreateClass() {
+                const input = document.getElementById('new-class-name');
+                const newName = input.value.trim();
+                if (newName) {
+                    createNewClass(newName);
+                    input.value = '';
+                    populateClassManagementModal();
+                    renderAll();
+                } else {
+                    showToast("Por favor, insira um nome para a nova turma.", "error");
+                }
+            }
+            
+            function handleSelectClass(e) {
+                appState.activeClassId = e.target.value;
+                saveState();
+                renderAll();
+                closeAllModals();
+            }
+            
+            function handleRenameClass() {
+                const input = document.getElementById('rename-class-name');
+                const newName = input.value.trim();
+                if(newName) {
+                    getActiveClass().name = newName;
+                    input.value = '';
+                    saveState();
+                    populateClassManagementModal();
+                    updateHeader();
+                    showToast("Turma renomeada com sucesso.", "success");
+                } else {
+                     showToast("Por favor, insira um novo nome para a turma.", "error");
+                }
+            }
+            
+            function handleDeleteClass() {
+                 if (Object.keys(appState.classes).length <= 1) {
+                    showToast("Não pode apagar a única turma existente.", "error");
+                    return;
+                }
+                const className = getActiveClass().name;
+                showConfirmation(`Tem a certeza que deseja apagar a turma "${className}"? Todos os seus dados serão perdidos permanentemente.`, () => {
+                    delete appState.classes[appState.activeClassId];
+                    appState.activeClassId = Object.keys(appState.classes)[0];
+                    saveState();
+                    populateClassManagementModal();
+                    renderAll();
+                    showToast(`Turma "${className}" apagada.`, "success");
+                });
+            }
+
+            function populateClassManagementModal() {
+                DOMElements.classSelectDropdown.innerHTML = Object.values(appState.classes)
+                    .map(c => `<option value="${c.id}" ${c.id === appState.activeClassId ? 'selected' : ''}>${c.name}</option>`)
+                    .join('');
+            }
+
+            function handleSelectLayout(e) {
+                const activeClass = getActiveClass();
+                activeClass.activeLayoutName = e.target.value;
+                saveState();
+                renderAll();
+            }
+
+            function handleSaveLayout() {
+                const activeClass = getActiveClass();
+                showPrompt('Guardar Layout', 'Insira um nome para o layout:', activeClass.activeLayoutName)
+                    .then(name => {
+                        if (name) {
+                            const currentLayout = getActiveLayout();
+                            // Create a deep copy of the layout to save it
+                            activeClass.layouts[name] = JSON.parse(JSON.stringify(currentLayout));
+                            activeClass.activeLayoutName = name;
+                            saveState();
+                            renderLayoutControls();
+                            showToast(`Layout "${name}" guardado.`, 'success');
+                        }
+                    });
+            }
+
+            function handleManageLayouts() {
+                renderManageLayoutsModal();
+                showModal('manage-layouts-modal');
+            }
+
+            // --- RENDERING ---
+            function updateHeader() {
+                DOMElements.activeClassName.textContent = getActiveClass()?.name || "Nenhuma Turma";
+            }
+
+            function renderStudentsList() {
+                const activeClass = getActiveClass();
+                const activeLayout = getActiveLayout();
+                const studentsInGridIds = new Set(Object.values(activeLayout).filter(Boolean).map(s => s.id));
+                const availableStudents = activeClass.students.filter(student => !studentsInGridIds.has(student.id));
+
+                if (activeClass.students.length === 0) {
+                     DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Nenhum aluno nesta turma.</p></div>`;
+                } else if (availableStudents.length === 0) {
+                    DOMElements.studentsList.innerHTML = `<div class="empty-state"><p>Todos os alunos estão no layout.</p></div>`;
+                } else {
+                    DOMElements.studentsList.innerHTML = availableStudents.map(student => `
+                        <div class="student-item" draggable="true" data-student-id="${student.id}">
+                            <div class="student-info">
+                                <div class="student-name">${student.name}</div>
+                                <div class="student-number">Nº ${student.number}</div>
+                            </div>
+                            <div class="student-actions">
+                                <button class="student-edit" data-student-id="${student.id}" title="Editar aluno">✏️</button>
+                                <button class="student-remove" data-student-id="${student.id}" title="Remover aluno">&times;</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                DOMElements.studentsList.onclick = (e) => {
+                    const removeBtn = e.target.closest('.student-remove');
+                    if (removeBtn) {
+                        const studentId = parseInt(removeBtn.dataset.studentId);
+                        const student = activeClass.students.find(s => s.id === studentId);
+                        if(student) {
+                            showConfirmation(`Tem a certeza que deseja remover o aluno ${student.name}? Esta ação irá removê-lo de todos os layouts.`, () => removeStudent(studentId));
+                        }
+                        return;
+                    }
+
+                    const editBtn = e.target.closest('.student-edit');
+                    if (editBtn) {
+                        const studentId = parseInt(editBtn.dataset.studentId);
+                        openEditStudentModal(studentId);
+                    }
+                };
+            }
+
+            function renderLayoutControls() {
+                const activeClass = getActiveClass();
+                DOMElements.layoutSelect.innerHTML = Object.keys(activeClass.layouts)
+                    .map(name => `<option value="${name}" ${name === activeClass.activeLayoutName ? 'selected' : ''}>${name}</option>`)
+                    .join('');
+            }
+
+            function renderClassroomGrid() {
+                const activeClass = getActiveClass();
+                const activeLayout = getActiveLayout();
+                const participationStats = getParticipationStats();
+                const gridHtml = [];
+                for (let i = 0; i < 36; i++) {
+                    const student = activeLayout[i];
+                    const hasInteractions = student && participationStats.studentTotals[student.id] > 0;
+                    const interactionCount = student ? (participationStats.studentTotals[student.id] || 0) : 0;
+                    
+                    if (student) {
+                        gridHtml.push(`
+                            <div class="grid-cell occupied ${hasInteractions ? 'participated' : ''}" data-cell-index="${i}" data-student-id="${student.id}">
+                                <div class="cell-student-name">${student.name}</div>
+                                <div class="cell-student-number">Nº ${student.number}</div>
+                                ${interactionCount > 0 ? `<div class="interaction-count">${interactionCount}</div>` : ''}
+                            </div>
+                        `);
+                    } else {
+                        gridHtml.push(`<div class="grid-cell empty" data-cell-index="${i}"></div>`);
+                    }
+                }
+                DOMElements.classroomGrid.innerHTML = gridHtml.join('');
+                setupDragAndDrop();
+            }
+
+            function updateStatistics() {
+                const participationStats = getParticipationStats();
+                DOMElements.totalInteractions.textContent = participationStats.totalInteractions;
+                DOMElements.participatingStudents.textContent = participationStats.participatingStudentsCount;
+            }
+
+            function updateClassStatusUI() {
+                const activeClass = getActiveClass();
+                const isClassActive = activeClass.isClassActive;
+                DOMElements.toggleClassBtn.textContent = isClassActive ? 'Terminar Aula' : 'Iniciar Aula';
+                DOMElements.toggleClassBtn.classList.toggle('btn--primary', !isClassActive);
+                DOMElements.toggleClassBtn.classList.toggle('btn--outline', isClassActive);
+                DOMElements.classStatus.innerHTML = isClassActive ? '<span class="status status--success">Aula Ativa</span>' : '<span class="status status--info">Configuração</span>';
+                DOMElements.statistics.style.display = isClassActive ? 'block' : 'none';
+                DOMElements.showReportBtn.style.display = isClassActive ? 'block' : 'none';
+
+                // Disable layout editing when class is active
+                DOMElements.layoutSelect.disabled = isClassActive;
+                DOMElements.saveLayoutBtn.disabled = isClassActive;
+                DOMElements.manageLayoutsBtn.disabled = isClassActive;
+            }
+
+            // --- DRAG AND DROP ---
+            function setupDragAndDrop() {
+                const isClassActive = getActiveClass().isClassActive;
+                if (isClassActive) return; // Disable all D&D if class is active
+                
                 document.querySelectorAll('.student-item').forEach(item => {
-                    item.setAttribute('draggable', 'true');
                     item.addEventListener('dragstart', e => {
-                        if (isClassActive) { e.preventDefault(); return; }
                         e.dataTransfer.setData('text/plain', e.target.dataset.studentId);
                         e.target.classList.add('dragging');
                     });
@@ -1066,31 +1117,149 @@
                 });
 
                 DOMElements.classroomGrid.querySelectorAll('.grid-cell.occupied').forEach(cell => {
-                    cell.setAttribute('draggable', !isClassActive);
+                    cell.setAttribute('draggable', 'true');
                     cell.addEventListener('dragstart', e => {
-                        if (isClassActive) { e.preventDefault(); return; }
                         e.stopPropagation();
                         e.dataTransfer.setData('text/plain', e.currentTarget.dataset.studentId);
                         e.dataTransfer.setData('origin-cell', e.currentTarget.dataset.cellIndex);
                         setTimeout(() => e.target.style.opacity = '0.5', 0);
                     });
-                    cell.addEventListener('dragend', e => e.target.style.opacity = '1');
+                     cell.addEventListener('dragend', e => e.target.style.opacity = '1');
                 });
 
                 DOMElements.classroomGrid.querySelectorAll('.grid-cell').forEach(cell => {
-                    cell.addEventListener('dragover', e => {
-                        if (isClassActive) return;
-                        e.preventDefault();
-                        e.currentTarget.classList.add('drag-over');
-                    });
+                    cell.addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); });
                     cell.addEventListener('dragleave', e => e.currentTarget.classList.remove('drag-over'));
-                    cell.addEventListener('drop', handleDrop);
+                    cell.addEventListener('drop', handleDropOnGrid);
+                });
+
+                DOMElements.studentsList.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    if (e.dataTransfer.getData('origin-cell')) {
+                        DOMElements.studentsList.classList.add('drag-over');
+                    }
+                });
+                DOMElements.studentsList.addEventListener('dragleave', () => DOMElements.studentsList.classList.remove('drag-over'));
+                DOMElements.studentsList.addEventListener('drop', handleDropOnList);
+                
+                DOMElements.classroomGrid.querySelectorAll('.grid-cell.occupied').forEach(cell => {
+                    cell.addEventListener('click', e => handleCellClick(e.currentTarget));
+                    cell.addEventListener('dblclick', e => handleCellDoubleClick(e.currentTarget));
                 });
             }
+
+            function handleDropOnGrid(e) {
+                e.preventDefault();
+                if (getActiveClass().isClassActive) return;
+                e.currentTarget.classList.remove('drag-over');
+
+                const studentId = parseInt(e.dataTransfer.getData('text/plain'));
+                const targetCellIndex = parseInt(e.currentTarget.dataset.cellIndex);
+                const originCellIndex = e.dataTransfer.getData('origin-cell');
+                const student = getActiveClass().students.find(s => s.id === studentId);
+                if (!student) return;
+
+                const activeLayout = getActiveLayout();
+                const studentInTargetCell = activeLayout[targetCellIndex];
+
+                if (originCellIndex) delete activeLayout[originCellIndex];
+                activeLayout[targetCellIndex] = student;
+                if (studentInTargetCell && originCellIndex) {
+                    activeLayout[originCellIndex] = studentInTargetCell;
+                }
+
+                saveState();
+                renderAll();
+            }
             
+            function handleDropOnList(e) {
+                e.preventDefault();
+                if (getActiveClass().isClassActive) return;
+                DOMElements.studentsList.classList.remove('drag-over');
+                
+                const originCellIndex = e.dataTransfer.getData('origin-cell');
+                if (originCellIndex) {
+                    delete getActiveLayout()[originCellIndex];
+                    saveState();
+                    renderAll();
+                }
+            }
+
+            // --- ACTIONS ---
+            function handleAddStudent(e) {
+                e.preventDefault();
+                const activeClass = getActiveClass();
+                const name = document.getElementById('add-student-name').value.trim();
+                const number = document.getElementById('add-student-number').value.trim();
+
+                if (!name || !number) return showToast('Por favor preencha todos os campos.', 'error');
+                if (activeClass.students.some(s => s.number === number)) return showToast('Já existe um aluno com este número nesta turma.', 'error');
+
+                const newStudent = { id: activeClass.nextStudentId++, name, number };
+                activeClass.students.push(newStudent);
+                
+                DOMElements.addStudentForm.reset();
+                closeAllModals();
+                showToast(`Aluno ${name} adicionado com sucesso.`, 'success');
+                saveState();
+                renderAll();
+            }
+            
+            function handleEditStudent(e) {
+                e.preventDefault();
+                const activeClass = getActiveClass();
+                const studentId = parseInt(document.getElementById('edit-student-id').value);
+                const name = document.getElementById('edit-student-name').value.trim();
+                const number = document.getElementById('edit-student-number').value.trim();
+
+                if (!name || !number) return showToast('Por favor preencha todos os campos.', 'error');
+                if (activeClass.students.some(s => s.number === number && s.id !== studentId)) return showToast('Já existe outro aluno com este número nesta turma.', 'error');
+
+                const studentToUpdate = activeClass.students.find(s => s.id === studentId);
+                if (studentToUpdate) {
+                    studentToUpdate.name = name;
+                    studentToUpdate.number = number;
+                }
+
+                Object.values(activeClass.layouts).forEach(layout => {
+                    Object.keys(layout).forEach(key => {
+                        if (layout[key]?.id === studentId) {
+                            layout[key].name = name;
+                            layout[key].number = number;
+                        }
+                    });
+                });
+
+                closeAllModals();
+                showToast(`Aluno ${name} atualizado com sucesso.`, 'success');
+                saveState();
+                renderAll();
+            }
+            
+            function removeStudent(studentId) {
+                const activeClass = getActiveClass();
+                const student = activeClass.students.find(s => s.id === studentId);
+                if (!student) return;
+
+                activeClass.students = activeClass.students.filter(s => s.id !== studentId);
+                
+                Object.values(activeClass.layouts).forEach(layout => {
+                    Object.keys(layout).forEach(key => {
+                        if (layout[key]?.id === studentId) {
+                            delete layout[key];
+                        }
+                    });
+                });
+                
+                delete activeClass.interactions[studentId];
+
+                showToast(`Aluno ${student.name} removido com sucesso.`, 'success');
+                saveState();
+                renderAll();
+            }
+
             function toggleClass() {
                 const activeClass = getActiveClass();
-                if (!activeClass) return;
                 activeClass.isClassActive = !activeClass.isClassActive;
                 if (activeClass.isClassActive) {
                     showToast('Aula iniciada! Clique nos alunos para registar interações.', 'success');
@@ -1104,24 +1273,41 @@
 
             function clearClassData() {
                 const activeClass = getActiveClass();
-                if (!activeClass) return;
                 activeClass.interactions = {};
                 if (activeClass.isClassActive) {
-                    toggleClass(); // Termina a aula e re-renderiza
+                    toggleClass();
                 } else {
                     saveState();
                     renderAll();
                 }
                 showToast('Dados da aula limpos com sucesso.', 'success');
             }
-            
-            function handleInteraction(e) {
-                const button = e.target.closest('.interaction-btn');
-                if (!button) return;
 
+            function handleCellClick(cell) {
                 const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const interactionType = button.dataset.type;
+                if (!activeClass.isClassActive) return;
+                const studentId = parseInt(cell.dataset.studentId);
+                const student = activeClass.students.find(s => s.id === studentId);
+                if (student) showInteractionMenu(cell, student);
+            }
+            
+            function handleCellDoubleClick(cell) {
+                const activeClass = getActiveClass();
+                if (activeClass.isClassActive) return; 
+                
+                const cellIndex = parseInt(cell.dataset.cellIndex);
+                const student = getActiveLayout()[cellIndex];
+                if (student) {
+                    delete getActiveLayout()[cellIndex];
+                    showToast(`${student.name} removido do layout.`, 'info');
+                    saveState();
+                    renderAll();
+                }
+            }
+
+            function handleInteraction(e) {
+                const activeClass = getActiveClass();
+                const interactionType = e.currentTarget.dataset.type;
                 const studentId = parseInt(DOMElements.interactionMenu.dataset.studentId);
                 
                 if (!activeClass.interactions[studentId]) {
@@ -1131,92 +1317,207 @@
                 
                 closeInteractionMenu();
                 const student = activeClass.students.find(s => s.id === studentId);
-                showToast(`${INTERACTION_TYPES[interactionType].label}: ${student.name}`, 'success');
+                showToast(`${interactionTypes[interactionType].label}: ${student.name}`, 'success');
                 saveState();
                 renderAll();
             }
 
             function handleRandomStudentSelection() {
                 const activeClass = getActiveClass();
-                if (!activeClass || !activeClass.isClassActive) {
-                    showToast("Inicie a aula para selecionar um aluno.", "info");
-                    return;
-                }
+                if (!activeClass.isClassActive) return showToast("Inicie a aula para selecionar um aluno.", "info");
 
-                const studentsInGrid = Object.entries(activeClass.classroomLayout)
+                const studentsInGrid = Object.entries(getActiveLayout())
                     .filter(([, student]) => student)
                     .map(([cellIndex, student]) => ({ ...student, cellIndex }));
 
-                if (studentsInGrid.length === 0) {
-                    showToast("Não há alunos na grelha.", "warning");
-                    return;
-                }
-
-                const nonParticipants = studentsInGrid.filter(student => {
-                    const studentInteractions = activeClass.interactions[student.id];
-                    return !studentInteractions || Object.values(studentInteractions).reduce((a, b) => a + b, 0) === 0;
-                });
-
+                if (studentsInGrid.length === 0) return showToast("Não há alunos no layout para selecionar.", "warning");
+                
+                const participationStats = getParticipationStats();
+                const nonParticipants = studentsInGrid.filter(s => participationStats.studentTotals[s.id] === 0);
                 const pool = nonParticipants.length > 0 ? nonParticipants : studentsInGrid;
+                
                 const selectedStudent = pool[Math.floor(Math.random() * pool.length)];
-
                 const cell = DOMElements.classroomGrid.querySelector(`[data-cell-index="${selectedStudent.cellIndex}"]`);
                 if (cell) {
-                    cell.classList.remove('highlight'); // Reset animation
-                    void cell.offsetWidth; // Trigger reflow
+                    cell.classList.remove('highlight');
+                    void cell.offsetWidth;
                     cell.classList.add('highlight');
+                    setTimeout(() => cell.classList.remove('highlight'), 3000);
                 }
                 showToast(`Aluno selecionado: ${selectedStudent.name}`, 'success');
             }
-            
+
+            // --- UI & MODALS ---
+            function showModal(modalId) {
+                closeAllModals();
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.add('active');
+                    if (modalId === 'report-modal') generateReport();
+                }
+            }
+
+            function closeAllModals() {
+                document.querySelectorAll('.modal.active').forEach(modal => modal.classList.remove('active'));
+            }
+
+            function openEditStudentModal(studentId) {
+                const student = getActiveClass().students.find(s => s.id === studentId);
+                if (!student) return;
+                document.getElementById('edit-student-id').value = student.id;
+                document.getElementById('edit-student-name').value = student.name;
+                document.getElementById('edit-student-number').value = student.number;
+                showModal('edit-student-modal');
+            }
+
+            function showConfirmation(message, onConfirm) {
+                DOMElements.confirmModalText.textContent = message;
+                DOMElements.confirmOkBtn.onclick = () => {
+                    closeAllModals();
+                    onConfirm();
+                };
+                showModal('confirm-modal');
+            }
+
+            function showPrompt(title, text, defaultValue = '') {
+                return new Promise((resolve) => {
+                    DOMElements.promptTitle.textContent = title;
+                    DOMElements.promptText.textContent = text;
+                    DOMElements.promptInput.value = defaultValue;
+                    showModal('prompt-modal');
+
+                    const formHandler = (e) => {
+                        e.preventDefault();
+                        cleanup();
+                        resolve(DOMElements.promptInput.value.trim());
+                    };
+
+                    const cancelHandler = () => {
+                        cleanup();
+                        resolve(null);
+                    };
+
+                    function cleanup() {
+                        DOMElements.promptForm.removeEventListener('submit', formHandler);
+                        DOMElements.promptCancelBtn.removeEventListener('click', cancelHandler);
+                        closeAllModals();
+                    }
+
+                    DOMElements.promptForm.addEventListener('submit', formHandler);
+                    DOMElements.promptCancelBtn.addEventListener('click', cancelHandler);
+                });
+            }
+
             function showInteractionMenu(cell, student) {
                 const rect = cell.getBoundingClientRect();
                 const menu = DOMElements.interactionMenu;
                 menu.dataset.studentId = student.id;
                 document.getElementById('interaction-student-name').textContent = student.name;
                 
-                menu.style.left = `${rect.left}px`;
-                menu.style.top = `${rect.bottom + 5}px`;
-
-                if (rect.bottom + menu.offsetHeight > window.innerHeight) {
-                    menu.style.top = `${rect.top - menu.offsetHeight - 5}px`;
-                }
-                if (rect.left + menu.offsetWidth > window.innerWidth) {
-                    menu.style.left = `${rect.right - menu.offsetWidth}px`;
-                }
                 menu.classList.add('active');
+                let top = rect.bottom + 5;
+                let left = rect.left;
+                if (top + menu.offsetHeight > window.innerHeight) top = rect.top - menu.offsetHeight - 5;
+                if (left + menu.offsetWidth > window.innerWidth) left = rect.right - menu.offsetWidth;
+                menu.style.top = `${top}px`;
+                menu.style.left = `${left}px`;
             }
 
             function closeInteractionMenu() {
                 DOMElements.interactionMenu.classList.remove('active');
             }
+            
+            function renderManageLayoutsModal() {
+                const activeClass = getActiveClass();
+                const layouts = activeClass.layouts;
+                DOMElements.manageLayoutsList.innerHTML = Object.keys(layouts).map(name => `
+                    <div class="participation-item">
+                        <span>${name}</span>
+                        <div>
+                            <button class="btn btn--outline btn--sm rename-layout-btn" data-name="${name}">Renomear</button>
+                            <button class="btn btn--danger btn--sm delete-layout-btn" data-name="${name}" ${Object.keys(layouts).length <= 1 ? 'disabled' : ''}>Apagar</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                DOMElements.manageLayoutsList.querySelectorAll('.rename-layout-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        const oldName = e.target.dataset.name;
+                        showPrompt('Renomear Layout', `Insira o novo nome para "${oldName}":`, oldName)
+                            .then(newName => {
+                                if (newName && newName !== oldName) {
+                                    if (layouts[newName]) {
+                                        showToast(`Já existe um layout com o nome "${newName}".`, 'error');
+                                    } else {
+                                        layouts[newName] = layouts[oldName];
+                                        delete layouts[oldName];
+                                        if (activeClass.activeLayoutName === oldName) {
+                                            activeClass.activeLayoutName = newName;
+                                        }
+                                        saveState();
+                                        renderLayoutControls();
+                                        renderManageLayoutsModal(); // Refresh the list
+                                    }
+                                }
+                            });
+                    });
+                });
+
+                DOMElements.manageLayoutsList.querySelectorAll('.delete-layout-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        const nameToDelete = e.target.dataset.name;
+                        showConfirmation(`Tem a certeza que deseja apagar o layout "${nameToDelete}"?`, () => {
+                            delete layouts[nameToDelete];
+                            if (activeClass.activeLayoutName === nameToDelete) {
+                                activeClass.activeLayoutName = Object.keys(layouts)[0];
+                            }
+                            saveState();
+                            renderLayoutControls();
+                            renderClassroomGrid();
+                            renderManageLayoutsModal();
+                        });
+                    });
+                });
+            }
+
+            // --- REPORTING & DATA ---
+            function getParticipationStats() {
+                const activeClass = getActiveClass();
+                const studentTotals = {};
+                let totalInteractions = 0;
+                
+                for (const student of activeClass.students) {
+                    const studentInteractions = activeClass.interactions[student.id] || {};
+                    const count = Object.values(studentInteractions).reduce((a, b) => a + b, 0);
+                    studentTotals[student.id] = count;
+                    totalInteractions += count;
+                }
+                const participatingStudentsCount = Object.values(studentTotals).filter(count => count > 0).length;
+                return { studentTotals, totalInteractions, participatingStudentsCount };
+            }
 
             function generateReport() {
                 const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const studentsInGrid = Object.values(activeClass.classroomLayout).filter(Boolean);
-                const lowParticipationStudents = studentsInGrid.filter(student => {
-                    const studentInteractions = activeClass.interactions[student.id];
-                    return !studentInteractions || Object.values(studentInteractions).reduce((a, b) => a + b, 0) === 0;
-                });
+                const participationStats = getParticipationStats();
+                const studentsInGrid = Object.values(getActiveLayout()).filter(Boolean);
+
+                const lowParticipationStudents = studentsInGrid
+                    .filter(student => participationStats.studentTotals[student.id] === 0)
+                    .sort((a, b) => a.name.localeCompare(b.name));
                 
-                const lowParticipationList = document.getElementById('low-participation-list');
-                lowParticipationList.innerHTML = lowParticipationStudents.length === 0
-                    ? `<div class="participation-item"><span>🎉 Todos os alunos na grelha participaram!</span></div>`
+                document.getElementById('low-participation-list').innerHTML = lowParticipationStudents.length === 0
+                    ? `<div class="participation-item"><span>🎉 Todos os alunos no layout participaram!</span></div>`
                     : lowParticipationStudents.map(s => `<div class="participation-item"><span>${s.name} (Nº ${s.number})</span><span class="status status--warning">Sem participação</span></div>`).join('');
 
                 const interactionDetailsContainer = document.getElementById('interaction-details-container');
-                const interactionsByType = {};
+                const interactionsByType = {};  
 
                 for (const [studentId, studentInteractions] of Object.entries(activeClass.interactions)) {
                     const student = activeClass.students.find(s => s.id === parseInt(studentId));
                     if (!student) continue;
-
                     for (const [type, count] of Object.entries(studentInteractions)) {
                         if (count > 0) {
-                            if (!interactionsByType[type]) {
-                                interactionsByType[type] = { total: 0, students: [] };
-                            }
+                            if (!interactionsByType[type]) interactionsByType[type] = { total: 0, students: [] };
                             interactionsByType[type].total += count;
                             interactionsByType[type].students.push({ name: student.name, count });
                         }
@@ -1229,8 +1530,8 @@
                     interactionDetailsContainer.innerHTML = `<div class="participation-item"><span>Ainda não foram registadas interações.</span></div>`;
                 } else {
                     interactionDetailsContainer.innerHTML = sortedInteractionTypes.map(([type, data]) => {
-                        const typeInfo = INTERACTION_TYPES[type];
-                        data.students.sort((a, b) => b.count - a.count);
+                        const typeInfo = interactionTypes[type];
+                        data.students.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
                         return `
                             <details class="report-details">
                                 <summary class="report-summary">
@@ -1251,133 +1552,68 @@
 
             function exportReportToCSV() {
                 const activeClass = getActiveClass();
-                if (!activeClass) return;
                 let csvContent = "data:text/csv;charset=utf-8,";
-                
-                csvContent += `Relatorio da Turma;${activeClass.name}\r\n`;
+                const sanitizeField = (field) => `"${String(field).replace(/"/g, '""')}"`;
+
+                csvContent += `Relatorio da Turma;${sanitizeField(activeClass.name)}\r\n`;
                 const now = new Date();
                 csvContent += `Data;${now.toLocaleDateString('pt-PT')}\r\n`;
                 csvContent += `Hora;${now.toLocaleTimeString('pt-PT')}\r\n\r\n`;
 
-                csvContent += "Alunos Menos Participativos\r\n";
+                csvContent += "Alunos Sem Participacao (no layout ativo)\r\n";
                 csvContent += "Nome do Aluno;Numero\r\n";
-                const studentsInGrid = Object.values(activeClass.classroomLayout).filter(Boolean);
-                const lowParticipationStudents = studentsInGrid.filter(student => {
-                    const studentInteractions = activeClass.interactions[student.id];
-                    return !studentInteractions || Object.values(studentInteractions).reduce((a, b) => a + b, 0) === 0;
-                });
+                
+                const participationStats = getParticipationStats();
+                const studentsInGrid = Object.values(getActiveLayout()).filter(Boolean);
+                const lowParticipationStudents = studentsInGrid.filter(student => participationStats.studentTotals[student.id] === 0);
 
                 if (lowParticipationStudents.length === 0) {
-                    csvContent += "Todos os alunos participaram.\r\n";
+                    csvContent += "Todos os alunos no layout participaram.;\r\n";
                 } else {
                     lowParticipationStudents.forEach(student => {
-                        csvContent += `"${student.name}";"${student.number}"\r\n`;
+                        csvContent += `${sanitizeField(student.name)};${sanitizeField(student.number)}\r\n`;
                     });
                 }
                 csvContent += "\r\n";
 
-                csvContent += "Detalhe das Interacoes\r\n";
-                csvContent += "Tipo de Interacao;Aluno;Contagem\r\n";
+                csvContent += "Detalhe Geral das Interacoes (toda a turma)\r\n";
+                csvContent += "Numero do Aluno;Nome do Aluno;Total de Interacoes";
+                Object.values(interactionTypes).forEach(type => { csvContent += `;${sanitizeField(type.label)}`; });
+                csvContent += "\r\n";
 
-                Object.entries(INTERACTION_TYPES).forEach(([type, typeInfo]) => {
-                    const studentsWithThisInteraction = [];
-                    activeClass.students.forEach(student => {
-                        const count = activeClass.interactions[student.id]?.[type] || 0;
-                        if (count > 0) {
-                            studentsWithThisInteraction.push({ name: student.name, count });
-                        }
-                    });
-
-                    if (studentsWithThisInteraction.length > 0) {
-                        studentsWithThisInteraction.sort((a, b) => b.count - a.count);
-                        studentsWithThisInteraction.forEach(studentData => {
-                            csvContent += `"${typeInfo.label}";"${studentData.name}";${studentData.count}\r\n`;
-                        });
-                    }
+                activeClass.students.sort((a, b) => a.name.localeCompare(b.name)).forEach(student => {
+                    const studentInteractions = activeClass.interactions[student.id] || {};
+                    const total = participationStats.studentTotals[student.id] || 0;
+                    let row = `${sanitizeField(student.number)};${sanitizeField(student.name)};${total}`;
+                    Object.keys(interactionTypes).forEach(typeKey => { row += `;${studentInteractions[typeKey] || 0}`; });
+                    csvContent += `${row}\r\n`;
                 });
 
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `relatorio_${activeClass.name.replace(/\s+/g, '_')}.csv`);
+                const safeClassName = activeClass.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                link.setAttribute("download", `relatorio_${safeClassName}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 showToast("Relatório exportado com sucesso!", "success");
             }
-            
-            function populateClassManagementModal() {
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                DOMElements.classSelectDropdown.innerHTML = Object.values(appState.classes)
-                    .map(c => `<option value="${c.id}" ${c.id === appState.activeClassId ? 'selected' : ''}>${c.name}</option>`)
-                    .join('');
-            }
-            
-            function handleCreateClass(e) {
-                e.preventDefault();
-                const input = document.getElementById('new-class-name');
-                const newName = input.value.trim();
-                if (newName) {
-                    createNewClass(newName);
-                    input.value = '';
-                    populateClassManagementModal();
-                    renderAll();
-                }
+
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast--${type}`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease-in forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
             }
 
-            function handleSelectClass(e) {
-                appState.activeClassId = e.target.value;
-                saveState();
-                renderAll();
-            }
-
-            function handleRenameClass(e) {
-                e.preventDefault();
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const input = document.getElementById('rename-class-name');
-                const newName = input.value.trim();
-                if (newName) {
-                    activeClass.name = newName;
-                    input.value = '';
-                    saveState();
-                    populateClassManagementModal();
-                    updateHeader();
-                    showToast("Turma renomeada com sucesso.", "success");
-                }
-            }
-
-            function handleDeleteClass() {
-                if (Object.keys(appState.classes).length <= 1) {
-                    showToast("Não pode apagar a única turma existente.", "error");
-                    return;
-                }
-                const activeClass = getActiveClass();
-                if (!activeClass) return;
-                const className = activeClass.name;
-                showConfirmation(`Tem a certeza que deseja apagar a turma "${className}"?`, () => {
-                    delete appState.classes[appState.activeClassId];
-                    appState.activeClassId = Object.keys(appState.classes)[0];
-                    saveState();
-                    populateClassManagementModal();
-                    renderAll();
-                    showToast(`Turma "${className}" apagada.`, "success");
-                });
-            }
+            // --- START THE APP ---
+            initApp();
         });
     </script>
 </body>
 </html>
-```
-
-### O que fazer agora:
-
-1.  **Atualize o código** no seu repositório do GitHub com esta nova versão.
-2.  **Aguarde um minuto** para que o GitHub Pages atualize o seu site.
-3.  **Limpe a cache do seu navegador** para garantir que está a carregar a versão mais recente do ficheiro. Uma forma fácil de fazer isto é fazer um "hard refresh" (normalmente `Ctrl+Shift+R` no Windows/Linux ou `Cmd+Shift+R` no Mac).
-4.  Visite a sua página novamente.
-
-Se o problema persistir (o que é improvável), o passo final seria limpar manualmente os dados do site nas ferramentas de programador: vá ao separador **"Aplicação"** (ou "Application"), depois **"Armazenamento Local"** (ou "Local Storage"), encontre o seu site na lista, clique com o botão direito e selecione **"Limpar"** ("Clear"). Isto irá forçar a aplicação a começar completamente do zero com a nova estrutura de dados.
-
-Estas alterações deverão resolver o problema de forma definiti

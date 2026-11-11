@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#176b65">
   <meta name="description" content="Prepare a sala, acompanhe a participação e guarde o histórico das suas aulas neste dispositivo.">
-  <title>Grelha Ativa · Participação em sala de aula</title>
+  <title>Grelha Ativa · TIC, Educação e WEB</title>
   <link rel="stylesheet" href="styles.css">
   <script src="core.js" defer></script>
   <script src="app.js" defer></script>
@@ -13,7 +13,7 @@
 <body>
   <a class="skip-link" href="#main">Saltar para a sala</a>
   <header class="header">
-    <a class="brand" href="./" aria-label="Grelha Ativa, início"><span class="brand-mark" aria-hidden="true">▦</span><span>Grelha Ativa<small>Mais atenção a cada aluno.</small></span></a>
+    <a class="brand" href="./" aria-label="Grelha Ativa — TIC, Educação e WEB, início"><span class="brand-mark" aria-hidden="true">▦</span><span>Grelha Ativa<small>TIC, Educação e WEB</small></span></a>
     <div class="header-actions"><label for="class-select">Turma</label><select id="class-select"></select><button id="manage-class">Gerir turmas</button><button id="data-button">Cópias de segurança</button></div>
   </header>
   <div id="storage-banner" class="banner" role="alert" hidden></div>
@@ -27,7 +27,7 @@
       <aside class="panel lesson-panel"><h2>Acompanhar a aula</h2><div class="stat-main"><strong id="participation-count">0 / 0</strong><span>presentes com participação</span><progress id="participation-progress" value="0" max="1" aria-label="Proporção de presentes com participação"></progress></div><div class="stat-row"><span>Interações registadas</span><strong id="interaction-count">0</strong></div><div class="stat-row"><span>Dificuldades registadas</span><strong id="difficulty-count">0</strong></div><p id="rule-note" class="small muted"></p><div class="random-section"><label for="draw-mode">Dar a palavra</label><select id="draw-mode"><option value="all">Todos os presentes</option><option value="none">Sem participação registada</option><option value="least">Com menos participação</option></select><button id="draw-button" class="primary">Selecionar aluno</button><p id="draw-result" role="status" class="draw-result">Sem repetições até completar a ronda.</p></div><div class="section-heading"><h3>Últimos registos</h3><button id="event-log" class="text-button">Ver todos</button></div><ol id="recent-events" class="recent-events"></ol></aside>
     </div>
   </main>
-  <footer>Grelha Ativa · Os registos ajudam a observar; não substituem a avaliação do professor. <button id="privacy-button" class="text-button">Sobre os dados</button></footer>
+  <footer><strong>TIC, Educação e WEB</strong> · Grelha Ativa · Os registos ajudam a observar; não substituem a avaliação do professor. <button id="privacy-button" class="text-button">Sobre os dados</button></footer>
   <dialog id="dialog" aria-labelledby="dialog-title"><div class="dialog-header"><h2 id="dialog-title"></h2><button id="close-dialog" aria-label="Fechar janela">×</button></div><div id="dialog-body"></div></dialog>
   <div id="toast" role="status" aria-live="polite" hidden></div>
   <input id="csv-file" type="file" accept=".csv,text/csv" hidden>
